@@ -1,0 +1,24 @@
+<section>
+    <h1>Create Task</h1>
+    <form #createdTaskForm [formGroup]="createTaskForm" (ngSubmit)="createTask()">
+
+        <mat-form-field>
+            <input matInput formControlName="title" placeholder="Task title" type="text" value=" ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput formControlName="description" placeholder="Task description" value="">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-select formControlName="type" placeholder="Task type">
+                <mat-option value="Personal">Personal</mat-option>
+                <mat-option value="Work">Work</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+
+        <button mat-flat-button color="primary">Create Task</button>
+
+    </form>
+</section>
