@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TaskComponent } from './COMPONENTS/task/task.component';
 import { MaterialModule } from './material.module';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     ReactiveFormsModule,
     TaskComponent,
     MaterialModule,
