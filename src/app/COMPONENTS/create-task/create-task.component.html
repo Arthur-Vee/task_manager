@@ -3,18 +3,24 @@
     <form *ngIf="createTaskForm" #createdTaskForm [formGroup]="createTaskForm" (ngSubmit)="createTask()">
 
         <mat-form-field>
-            <input matInput formControlName="title" placeholder="Task title" type="text" value=" ">
+            <mat-label>Title</mat-label>
+            <input id="title" matInput formControlName="title" placeholder="Task title" type="text" value="">
+           <mat-error>Title is required</mat-error>
         </mat-form-field>
 
         <mat-form-field>
+            <mat-label>Description</mat-label>
             <input matInput formControlName="description" placeholder="Task description" value="">
+            <mat-error>Description is requred</mat-error>
         </mat-form-field>
 
         <mat-form-field>
+            <mat-label>Type</mat-label>
             <mat-select formControlName="type" placeholder="Task type">
                 <mat-option value="Personal">Personal</mat-option>
                 <mat-option value="Work">Work</mat-option>
             </mat-select>
+            <mat-error>Type is required</mat-error>
         </mat-form-field>
         <br>
 
