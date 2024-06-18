@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     TaskComponent,
     MaterialModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
