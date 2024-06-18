@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Task } from '../../MODELS/task.model';
@@ -17,14 +17,12 @@ import { NgIf } from '@angular/common';
     MaterialModule,
     NgIf,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './create-task.component.html',
   styleUrl: './create-task.component.scss'
 })
 
 export class CreateTaskComponent {
   createTaskForm: FormGroup | null = null
-  errorMessage = signal('');
 
   constructor(private taskService: TasksService, private fb: FormBuilder) {
 
