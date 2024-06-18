@@ -43,7 +43,6 @@ export class TasksService {
       const createdTask = this.tasks.getValue().slice()
       createdTask.push(task)
       this.tasks.next(createdTask)
-      return
 
     } else {
       console.log("no Tasks were Created")

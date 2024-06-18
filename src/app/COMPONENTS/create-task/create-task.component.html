@@ -1,6 +1,6 @@
 <section>
     <h1>Create Task</h1>
-    <form #createdTaskForm [formGroup]="createTaskForm" (ngSubmit)="createTask()">
+    <form *ngIf="createTaskForm" #createdTaskForm [formGroup]="createTaskForm" (ngSubmit)="createTask()">
 
         <mat-form-field>
             <input matInput formControlName="title" placeholder="Task title" type="text" value=" ">

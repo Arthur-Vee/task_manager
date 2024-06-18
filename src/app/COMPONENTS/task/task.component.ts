@@ -3,7 +3,6 @@ import { CreateTaskComponent } from '../create-task/create-task.component';
 import { Task } from '../../MODELS/task.model';
 import { TasksService } from '../../SERVICE/tasks.service';
 import { NgFor, NgIf, CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { MaterialModule } from '../../material.module';
 
 
@@ -26,13 +25,10 @@ import { MaterialModule } from '../../material.module';
 
 
 export class TaskComponent {
-  tasks$!: Observable<Task[]>
-  constructor(private taskService: TasksService) {
+  tasks$ = this.taskService.availableTasks$;
 
-  }
-  ngOnInit() {
-    this.tasks$ = this.taskService.availableTasks$;
-  }
+  constructor(private taskService: TasksService) { }
+
 
   deleteTask(task: Task) {
     this.taskService.deleteTask(task)
