@@ -5,6 +5,7 @@ import { Task } from '../../MODELS/task.model';
 import { MaterialModule } from '../../material.module';
 import { TasksService } from '../../SERVICE/tasks.service';
 import { NgIf } from '@angular/common';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -37,7 +38,7 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-
+      task.id = uuidv4(),
       task.createdOn = new Date()
       task.status = "In Progress"
 

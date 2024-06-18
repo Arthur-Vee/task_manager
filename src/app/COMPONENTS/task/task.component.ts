@@ -9,6 +9,7 @@ import { MaterialModule } from '../../material.module';
 
 
 
+
 @Component({
   selector: 'app-task',
   standalone: true,
@@ -32,6 +33,9 @@ export class TaskComponent {
 
   deleteTask(task: Task) {
     this.taskService.deleteTask(task)
+  }
+  taskDetails(id: string) {
+    this.taskService.taskDetails(id)
   }
 
 }
