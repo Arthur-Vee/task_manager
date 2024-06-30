@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Task } from '../../MODELS/task.model';
+import { Task } from '../../models/task.model';
 import { MaterialModule } from '../../material.module';
-import { TasksService } from '../../SERVICE/tasks.service';
+import { TasksService } from '../../service/tasks.service';
 import { NgIf } from '@angular/common';
-import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -38,13 +37,8 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-      task.id = uuidv4(),
-      task.createdOn = new Date()
-      task.status = "In Progress"
-
       this.taskService.createNewTask(task)
       this.createTaskForm.reset()
-
     } else {
       console.log("Task creation failed.")
     }

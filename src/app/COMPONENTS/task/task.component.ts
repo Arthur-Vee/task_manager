@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CreateTaskComponent } from '../create-task/create-task.component';
-import { Task } from '../../MODELS/task.model';
-import { TasksService } from '../../SERVICE/tasks.service';
+import { Task } from '../../models/task.model';
+import { TasksService } from '../../service/tasks.service';
 import { NgFor, NgIf, CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
 
@@ -31,11 +31,14 @@ export class TaskComponent {
   constructor(private taskService: TasksService) { }
 
 
-  deleteTask(task: Task) {
-    this.taskService.deleteTask(task)
+  deleteTask(taskId:string) {
+    this.taskService.deleteTask(taskId)
   }
   taskDetails(id: string) {
     this.taskService.taskDetails(id)
+  }
+  updateTask(task:Task){
+    this.taskService.updateTask(task)
   }
 
 }

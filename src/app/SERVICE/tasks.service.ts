@@ -1,61 +1,77 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../MODELS/task.model';
-import { BehaviorSubject } from 'rxjs';
+import { Task } from '../models/task.model';
+import { BehaviorSubject, map } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { response } from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasksService {
+  updatedTaskList: any;
 
-  constructor() {
+  // readonly ROOT_URL = "localhost:3000" // ATM proxy handles this root
+  tasksApiUrl: string = "http://localhost:3000/tasks/"
+
+  constructor(private http: HttpClient, private router: Router) {
   }
-  private tasks = new BehaviorSubject<Task[]>([
-    {
-      id: "8c410ecc-a204-43b6-9582-1fee127f858a",
-      title: "Grocery Shopping",
-      description: "Buy milk, bread, eggs, and fruits",
-      type: "Personal",
-      createdOn: new Date(),
-      status: "To Do",
-    },
-    {
-      id: "d468c77f-844c-4af6-b590-af2d8c7a2b9d",
-      title: "Finish Work Report",
-      description: "Complete the Q2 sales report for the manager",
-      type: "Work",
-      createdOn: new Date(2024, 6, 15),
-      status: "In Progress",
-    },
-    {
-      id: "e70626f2-4baf-4c3e-94ca-b0a9ce4c7a39",
-      title: "Pay Bills",
-      description: "Pay electricity and internet bills",
-      type: "Personal",
-      createdOn: new Date(2024, 6, 12),
-      status: "In Progress",
-    },
-  ])
+  private tasks = new BehaviorSubject<Task[]>([])
 
   availableTasks$ = this.tasks.asObservable()
 
+  async getAllTasks() {
+    await this.http.get<Task[]>(this.tasksApiUrl).pipe(map(data => {
+      this.tasks.next([...data])
+    })).subscribe()
+  }
 
-  createNewTask(task: Task) {
-
+  async createNewTask(task: Task) {
     if (task) {
-      const createdTask = this.tasks.getValue().slice()
-      createdTask.push(task)
-      this.tasks.next(createdTask)
-
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        }),
+        responseType: 'text' as 'json'
+      };
+      await this.http.post(this.tasksApiUrl, task, httpOptions).subscribe()
     } else {
-      console.log("no Tasks were Created")
+      return
     }
   }
-  deleteTask(deletedTask: Task) {
-    const updatedTasksArray = this.tasks.getValue().filter((task) => task !== deletedTask);
+  async deleteTask(deleteTaskId: string) {
+    const updatedTasksArray = this.tasks.getValue().filter((task) => task.id !== deleteTaskId);
     this.tasks.next(updatedTasksArray)
+    const url = deleteTaskId;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      responseType: 'text' as 'json'
+    };
+    this.http.delete<string>(this.tasksApiUrl + url, httpOptions).subscribe(() => {
+    })
   }
-  taskDetails(id: string) {
+  async taskDetails(id: string) {
     const taskDetails = this.tasks.getValue().slice().filter((task) => task.id == id);
+  }
+ async updateTask(tasksNewData: Task) {
+    const body = {
+      id:tasksNewData.id,
+      description:tasksNewData.description,
+      title:tasksNewData.title,
+      status:tasksNewData.status
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      },),
+    };
+
+   await this.http.patch<string>(this.tasksApiUrl, body, httpOptions).subscribe((response) => {
+      console.log("Updated task with ID: "+response)
+
+    })
   }
 
 }

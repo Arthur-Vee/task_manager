@@ -13,7 +13,8 @@
                 <p>Task type: {{task.type}}</p>
                 <p>Status: {{task.status}}</p>
                 <p>Created on: {{task.createdOn}}</p>
-                <button id="deleteButton" mat-flat-button (click)="deleteTask(task)">Delete task</button>
+                <button id="deleteButton" mat-flat-button (click)="deleteTask(task.id)">Delete task</button>
+                <button id="updateButton" mat-flat-button (click)="updateTask(task)">Update task</button>
 
             </mat-card-content>
         </mat-card>

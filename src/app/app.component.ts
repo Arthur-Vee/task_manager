@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TaskComponent } from './COMPONENTS/task/task.component';
+import { TaskComponent } from './components/task/task.component';
 import { MaterialModule } from './material.module';
 import { CommonModule } from '@angular/common';
+import { TasksService } from './service/tasks.service';
+
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,10 @@ import { CommonModule } from '@angular/common';
 })
 
 export class AppComponent {
-  constructor() { }
   title = 'Task Manager';
+  constructor(private tasksService:TasksService) { }
+
+  async showAllTasks(){
+   await this.tasksService.getAllTasks()
+  }
 }

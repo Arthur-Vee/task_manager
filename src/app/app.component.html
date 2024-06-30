@@ -1,6 +1,6 @@
 <button mat-button type="button" routerLink="/" routerLinkActive="active">Home</button>
 <button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
-<button mat-button type="button" routerLink="/task-list" routerLinkActive="active"> Task list </button>
+<button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active" (click)="showAllTasks()"> Task list </button>
 <button mat-button type="button" routerLink="/task-details" routerLinkActive="active"> Task details </button>
 
 <router-outlet />
