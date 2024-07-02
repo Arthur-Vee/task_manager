@@ -4,7 +4,6 @@ import { Task } from '../../models/task.model';
 import { TasksService } from '../../service/tasks.service';
 import { NgFor, NgIf, CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 
 
@@ -27,25 +26,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 
 export class TaskComponent {
-  availableTasks$ = new BehaviorSubject<Task[]>([])
+
+  availableTasks$ = this.taskService.getAllTasks()
 
   constructor(private taskService: TasksService) {
   }
-  ngOnInit() {
-    this.taskService.getAllTasks().subscribe(data => {
-      this.availableTasks$.next(data)
-
-    })
-  }
 
   deleteTask(taskId: string) {
-    this.taskService.deleteTask(taskId)
-    const updatedTasksArray = this.availableTasks$.getValue().filter((task) => task.id !== taskId);
-    this.availableTasks$.next(updatedTasksArray)
-
+    this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
   taskDetails(taskId: string) {
-    this.taskService.taskDetails(taskId)
+    return this.taskService.taskDetails(taskId)
   }
   updateTask(task: Task) {
     this.taskService.updateTask(task)

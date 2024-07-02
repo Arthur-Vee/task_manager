@@ -1,11 +1,3 @@
-import { Injectable } from "@angular/core"
-
-@Injectable({
-    providedIn: 'root'
-  })
-
-export class Constants  {
-    tasksApiUrl = "http://localhost:3000/tasks/"
+export const tasksApiUrl = "http://localhost:3000/tasks/"
 
 
-}
