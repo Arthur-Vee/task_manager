@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TaskComponent } from './components/task/task.component';
 import { MaterialModule } from './material.module';
 import { CommonModule } from '@angular/common';
-import { TasksService } from './service/tasks.service';
 
 
 @Component({
@@ -24,9 +23,6 @@ import { TasksService } from './service/tasks.service';
 
 export class AppComponent {
   title = 'Task Manager';
-  constructor(private tasksService:TasksService) { }
+  constructor() { }
 
-  async showAllTasks(){
-   await this.tasksService.getAllTasks()
-  }
 }
