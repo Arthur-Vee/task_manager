@@ -1,5 +1,5 @@
 <ul>
-    <li *ngFor="let task of tasks$ | async" (click)="taskDetails(task.id)">
+    <li *ngFor="let task of availableTasks$ | async" (click)="taskDetails(task.id)">
         <mat-card class="task-card" appearance="outlined">
             <mat-card-header>
                 <mat-card-title>Task: {{task.title}}</mat-card-title>
