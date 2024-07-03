@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Task } from '../../models/task.model';
-import { MaterialModule } from '../../material.module';
-import { TasksService } from '../../service/tasks.service';
-import { NgIf } from '@angular/common';
-import { take } from 'rxjs';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core'
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
+import { ReactiveFormsModule } from '@angular/forms'
+import { Task } from '../../models/task.model'
+import { MaterialModule } from '../../material.module'
+import { TasksService } from '../../service/tasks.service'
+import { NgIf } from '@angular/common'
+import { take } from 'rxjs'
+import { Router } from '@angular/router'
 
 
 
@@ -39,7 +39,7 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']); })
+      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']) })
       this.createTaskForm.reset()
     } else {
       console.log("Task creation failed.")

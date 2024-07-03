@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TaskComponent } from './components/task/task.component';
-import { MaterialModule } from './material.module';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core'
+import { RouterOutlet, RouterLink } from '@angular/router'
+import { ReactiveFormsModule } from '@angular/forms'
+import { TaskComponent } from './components/task/task.component'
+import { MaterialModule } from './material.module'
+import { CommonModule } from '@angular/common'
 
 
 @Component({
@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
 })
 
 export class AppComponent {
-  title = 'Task Manager';
+  title = 'Task Manager'
   constructor() { }
 
 }

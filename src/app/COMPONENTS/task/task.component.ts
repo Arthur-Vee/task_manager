@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { CreateTaskComponent } from '../create-task/create-task.component';
-import { Task } from '../../models/task.model';
-import { TasksService } from '../../service/tasks.service';
-import { NgFor, NgIf, CommonModule } from '@angular/common';
-import { MaterialModule } from '../../material.module';
+import { Component } from '@angular/core'
+import { CreateTaskComponent } from '../create-task/create-task.component'
+import { Task } from '../../models/task.model'
+import { TasksService } from '../../service/tasks.service'
+import { NgFor, NgIf, CommonModule } from '@angular/common'
+import { MaterialModule } from '../../material.module'
 
 
 
