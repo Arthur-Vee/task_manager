@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { CreateTaskComponent } from '../create-task/create-task.component';
-import { Task } from '../../MODELS/task.model';
-import { TasksService } from '../../SERVICE/tasks.service';
-import { NgFor, NgIf, CommonModule } from '@angular/common';
-import { MaterialModule } from '../../material.module';
+import { Component } from '@angular/core'
+import { CreateTaskComponent } from '../create-task/create-task.component'
+import { Task } from '../../models/task.model'
+import { TasksService } from '../../service/tasks.service'
+import { NgFor, NgIf, CommonModule } from '@angular/common'
+import { MaterialModule } from '../../material.module'
 
 
 
@@ -26,16 +26,19 @@ import { MaterialModule } from '../../material.module';
 
 
 export class TaskComponent {
-  tasks$ = this.taskService.availableTasks$;
+
+  availableTasks$ = this.taskService.getAllTasks()
 
   constructor(private taskService: TasksService) { }
 
-
-  deleteTask(task: Task) {
-    this.taskService.deleteTask(task)
+  deleteTask(taskId: string) {
+    this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
-  taskDetails(id: string) {
-    this.taskService.taskDetails(id)
+  taskDetails(taskId: string) {
+    this.taskService.taskDetails(taskId)
+  }
+  updateTask(task: Task) {
+    this.taskService.updateTask(task)
   }
 
 }

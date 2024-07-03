@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Task } from '../../MODELS/task.model';
-import { MaterialModule } from '../../material.module';
-import { TasksService } from '../../SERVICE/tasks.service';
-import { NgIf } from '@angular/common';
-import { v4 as uuidv4 } from 'uuid';
+import { Component } from '@angular/core'
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
+import { ReactiveFormsModule } from '@angular/forms'
+import { Task } from '../../models/task.model'
+import { MaterialModule } from '../../material.module'
+import { TasksService } from '../../service/tasks.service'
+import { NgIf } from '@angular/common'
+import { take } from 'rxjs'
+import { Router } from '@angular/router'
 
 
 
@@ -25,7 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class CreateTaskComponent {
   createTaskForm: FormGroup | null = null
 
-  constructor(private taskService: TasksService, private fb: FormBuilder) {
+  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router) {
 
     this.createTaskForm = this.fb.group({
       title: new FormControl("", Validators.required),
@@ -38,13 +39,8 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-      task.id = uuidv4(),
-      task.createdOn = new Date()
-      task.status = "In Progress"
-
-      this.taskService.createNewTask(task)
+      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']) })
       this.createTaskForm.reset()
-
     } else {
       console.log("Task creation failed.")
     }
