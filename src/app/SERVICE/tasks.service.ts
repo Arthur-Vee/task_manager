@@ -17,14 +17,10 @@ export class TasksService {
   }
 
   createNewTask(task: Task) {
-    if (task) {
       return this.http.post<Task[]>(tasksApiUrl, task)
-    } else return
-
   }
   deleteTask(taskId: string) {
     return this.http.delete<Task[]>(tasksApiUrl + taskId)
-
   }
   taskDetails(tasksId: string) {
     console.log(tasksId)

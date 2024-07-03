@@ -39,12 +39,11 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe()
+      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']); })
       this.createTaskForm.reset()
     } else {
       console.log("Task creation failed.")
     }
-    this.router.navigate(['/tasks-list']);
   }
 
 }
