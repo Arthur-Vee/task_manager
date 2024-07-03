@@ -4,6 +4,7 @@ import { Task } from '../../models/task.model';
 import { TasksService } from '../../service/tasks.service';
 import { NgFor, NgIf, CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
+import { take } from 'rxjs';
 
 
 
@@ -27,16 +28,15 @@ import { MaterialModule } from '../../material.module';
 
 export class TaskComponent {
 
-  availableTasks$ = this.taskService.getAllTasks()
+  availableTasks$ = this.taskService.getAllTasks().pipe(take(1))
 
-  constructor(private taskService: TasksService) {
-  }
+  constructor(private taskService: TasksService) { }
 
   deleteTask(taskId: string) {
-    this.availableTasks$ = this.taskService.deleteTask(taskId)
+    this.availableTasks$ = this.taskService.deleteTask(taskId).pipe(take(1))
   }
   taskDetails(taskId: string) {
-    return this.taskService.taskDetails(taskId)
+    this.taskService.taskDetails(taskId)
   }
   updateTask(task: Task) {
     this.taskService.updateTask(task)
