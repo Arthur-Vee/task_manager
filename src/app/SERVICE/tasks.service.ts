@@ -15,6 +15,9 @@ export class TasksService {
   getAllTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(tasksApiUrl)
   }
+  getTaskById(taskId:string): Observable<Task> {
+    return this.http.get<Task>(tasksApiUrl+taskId)
+  }
 
   createNewTask(task: Task) {
       return this.http.post<Task[]>(tasksApiUrl, task)
@@ -25,12 +28,12 @@ export class TasksService {
   taskDetails(tasksId: string) {
     console.log(tasksId)
   }
-  updateTask(taskNewData: Task) {
+  updateTask(taskWithNewData: Task) {
     const body = {
-      id: taskNewData.id,
-      description: taskNewData.description,
-      title: taskNewData.title,
-      status: taskNewData.status
+      id: taskWithNewData.id,
+      description: taskWithNewData.description,
+      title: taskWithNewData.title,
+      status: taskWithNewData.status
     }
     return this.http.patch<string>(tasksApiUrl, body)
 

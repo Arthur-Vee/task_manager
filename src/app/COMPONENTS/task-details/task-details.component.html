@@ -1,0 +1,46 @@
+<mat-card class="task-card" appearance="outlined" *ngIf="task$ | async as task">
+    <mat-card-header>
+        <mat-card-title>Task {{task.title}} Details</mat-card-title>
+    </mat-card-header>
+    <br>
+    <form class="form" *ngIf="taskForm" [formGroup]="taskForm">
+        <mat-card-content class="mat-card-content ">
+            <mat-form-field appearance="fill">
+                <mat-label>{{task.title}}</mat-label>
+                <input matInput formControlName="title" required>
+                <mat-error>
+                    Title is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{task.description}}</mat-label>
+                <input matInput formControlName="description" required>
+                <mat-error>
+                    Description is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{task.type}}</mat-label>
+                <input matInput formControlName="type" required>
+                <mat-error>
+                    Type is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{task.status}}</mat-label>
+                <input matInput formControlName="status" required>
+                <mat-error>
+                    Status is required.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{task.createdOn}}</mat-label>
+                <input matInput formControlName="createdOn">
+            </mat-form-field>
+        </mat-card-content>
+        <br>
+        <mat-card-actions>
+            <button id="editButton" mat-flat-button color="primary" type="submit">Edit</button>
+        </mat-card-actions>
+    </form>
+</mat-card>
