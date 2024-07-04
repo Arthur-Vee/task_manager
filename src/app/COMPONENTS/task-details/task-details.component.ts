@@ -3,7 +3,7 @@ import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks.service'
 import { ActivatedRoute } from '@angular/router'
-import { Observable } from 'rxjs'
+import { Observable, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
 
@@ -20,29 +20,25 @@ import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } 
   styleUrl: './task-details.component.scss'
 })
 export class TaskDetailsComponent implements OnInit {
-  ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap) {
-      this.taskId = this.activatedRoute.snapshot.paramMap.get('id')
-    }
-    if (this.taskId) {
-      this.task$ = this.tasksService.getTaskById(this.taskId)
-    }
-  }
-  constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) {
-
-    this.taskForm = this.fb.group({
-      title: new FormControl({ value: "", disabled: true }, Validators.required),
-      description: new FormControl({ value: "", disabled: true }, Validators.required),
-      type: new FormControl({ value: "", disabled: true }, Validators.required),
-      status: new FormControl({ value: "", disabled: true }, Validators.required),
-      createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
-    })
-
-  }
-
-  taskId: string | null = null
+  
+  taskForm: FormGroup = this.fb.group({
+    title: new FormControl({ value: "", disabled: true }, Validators.required),
+    description: new FormControl({ value: "", disabled: true }, Validators.required),
+    type: new FormControl({ value: "", disabled: true }, Validators.required),
+    status: new FormControl({ value: "", disabled: true }, Validators.required),
+    createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
+  })
+  
   task$: Observable<Task> | null = null
-  taskForm: FormGroup | null = null
+
+  constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
+
+  ngOnInit() {
+    this.activatedRoute.params.pipe(switchMap((data) => {
+      const taskId: string = data['id']
+      return this.task$ = this.tasksService.getTaskById(taskId)
+    }), take(1)).subscribe()
+  }
 
 
 }
