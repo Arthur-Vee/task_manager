@@ -35,9 +35,7 @@ export class TaskDetailsComponent implements OnInit {
   constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(map((params) => params['id'] as string),
-      switchMap((taskId) => this.task$ = this.tasksService.getTaskById(taskId)),
-      take(1)).
-      subscribe()
+      this.task$ =  this.activatedRoute.params.pipe(map((params) => params['id'] as string),
+      switchMap((taskId) => this.tasksService.getTaskById(taskId)))
   }
 }
