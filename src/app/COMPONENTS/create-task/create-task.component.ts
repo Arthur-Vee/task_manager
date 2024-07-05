@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
-import { ReactiveFormsModule } from '@angular/forms'
+import { FormControl, FormGroup, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms'
 import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks.service'

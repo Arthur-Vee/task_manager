@@ -1,13 +1,23 @@
 li {
     list-style: none;
 }
-ul{
+
+ul {
     padding: 0px 40px;
 }
-#deleteButton{
+
+#deleteButton {
     background-color: rgb(176, 16, 16);
 }
+
 .task-card {
     margin: 0;
     padding: 0;
+}
+
+.task-title {
+    cursor: pointer;
+}
+button{
+    margin-right: 6px;
 }
