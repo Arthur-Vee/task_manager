@@ -15,27 +15,24 @@ export class TasksService {
   getAllTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(tasksApiUrl)
   }
-  getTaskById(taskId:string): Observable<Task> {
-    return this.http.get<Task>(tasksApiUrl+taskId)
+  getTaskById(taskId: string): Observable<Task> {
+    return this.http.get<Task>(tasksApiUrl + taskId)
   }
 
   createNewTask(task: Task) {
-      return this.http.post<Task[]>(tasksApiUrl, task)
+    return this.http.post<Task[]>(tasksApiUrl, task)
   }
   deleteTask(taskId: string) {
     return this.http.delete<Task[]>(tasksApiUrl + taskId)
   }
-  taskDetails(tasksId: string) {
-    console.log(tasksId)
-  }
-  updateTask(taskWithNewData: Task) {
+  updateTask(taskWithNewData: Task, taskId: string) {
     const body = {
-      id: taskWithNewData.id,
+      id: taskId,
       description: taskWithNewData.description,
       title: taskWithNewData.title,
       status: taskWithNewData.status
     }
-    return this.http.patch<string>(tasksApiUrl, body)
+    return this.http.patch<Task>(tasksApiUrl, body)
 
   }
 

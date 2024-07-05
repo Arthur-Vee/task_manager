@@ -1,9 +1,9 @@
 <mat-card class="task-card" appearance="outlined" *ngIf="task$ | async as task">
     <mat-card-header>
-        <mat-card-title>Task {{task.title}} Details</mat-card-title>
+        <mat-card-title>Task Details</mat-card-title>
     </mat-card-header>
     <br>
-    <form class="form" *ngIf="taskForm" [formGroup]="taskForm">
+    <form class="form" *ngIf="taskForm" [formGroup]="taskForm" (ngSubmit)="updateTaskDetails(task.id)">
         <mat-card-content class="mat-card-content ">
             <mat-form-field appearance="fill">
                 <mat-label>{{task.title}}</mat-label>
@@ -21,26 +21,31 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>{{task.type}}</mat-label>
-                <input matInput formControlName="type" required>
-                <mat-error>
-                    Type is required.
-                </mat-error>
+                <mat-select formControlName="type">
+                    <mat-option value="Personal">Personal</mat-option>
+                    <mat-option value="Work">Work</mat-option>
+                </mat-select>
+                <mat-error>Type is required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>{{task.status}}</mat-label>
-                <input matInput formControlName="status" required>
-                <mat-error>
-                    Status is required.
-                </mat-error>
+                <mat-select formControlName="status">
+                    <mat-option value="Personal">In progress</mat-option>
+                    <mat-option value="Awaiting approval">Awaiting approval</mat-option>
+                    <mat-option value="Done">Done</mat-option>
+                </mat-select>
+                <mat-error>Status is required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>{{task.createdOn}}</mat-label>
+                <mat-label>Created: {{task.createdOn}}</mat-label>
                 <input matInput formControlName="createdOn">
             </mat-form-field>
         </mat-card-content>
         <br>
         <mat-card-actions>
-            <button id="editButton" mat-flat-button color="primary" type="submit">Edit</button>
+            <button *ngIf="!editing" id="editButton" mat-flat-button color="primary" type="button"
+                (click)="allowTaskEdit()">Edit</button>
+            <button *ngIf="editing" id="saveButton" mat-flat-button class="success" type="submit">Save</button>
         </mat-card-actions>
     </form>
 </mat-card>

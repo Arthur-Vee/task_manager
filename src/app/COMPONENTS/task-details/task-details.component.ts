@@ -23,6 +23,8 @@ export class TaskDetailsComponent implements OnInit {
 
   task$: Observable<Task> | null = null
 
+  editing: boolean = false;
+
   taskForm: FormGroup = this.fb.group({
     title: new FormControl({ value: "", disabled: true }, Validators.required),
     description: new FormControl({ value: "", disabled: true }, Validators.required),
@@ -32,10 +34,35 @@ export class TaskDetailsComponent implements OnInit {
   })
 
 
+
   constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
-      this.task$ =  this.activatedRoute.params.pipe(map((params) => params['id'] as string),
+    this.task$ = this.activatedRoute.params.pipe(map((params) => params['id'] as string),
       switchMap((taskId) => this.tasksService.getTaskById(taskId)))
+  }
+
+  updateTaskDetails(taskId: string) {
+    this.editing = false
+    this.taskForm.disable()
+    const updatedTaskDetails = this.taskForm.value
+
+    this.task$ = this.tasksService.updateTask(updatedTaskDetails, taskId)
+  }
+  allowTaskEdit() {
+
+    this.editing = true
+
+    this.task$?.pipe(
+      take(1)
+    ).subscribe(task => {
+      this.taskForm = this.fb.group({
+        title: new FormControl({ value: task.title, disabled: false }, Validators.required),
+        description: new FormControl({ value: task.description, disabled: false }, Validators.required),
+        type: new FormControl({ value: task.type, disabled: false }, Validators.required),
+        status: new FormControl({ value: task.status, disabled: false }, Validators.required),
+        createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
+      });
+    });
   }
 }
