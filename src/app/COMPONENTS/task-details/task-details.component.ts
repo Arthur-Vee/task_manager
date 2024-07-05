@@ -3,7 +3,7 @@ import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks.service'
 import { ActivatedRoute } from '@angular/router'
-import { Observable, switchMap, take } from 'rxjs'
+import { Observable, map, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
 
@@ -20,7 +20,9 @@ import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } 
   styleUrl: './task-details.component.scss'
 })
 export class TaskDetailsComponent implements OnInit {
-  
+
+  task$: Observable<Task> | null = null
+
   taskForm: FormGroup = this.fb.group({
     title: new FormControl({ value: "", disabled: true }, Validators.required),
     description: new FormControl({ value: "", disabled: true }, Validators.required),
@@ -28,17 +30,14 @@ export class TaskDetailsComponent implements OnInit {
     status: new FormControl({ value: "", disabled: true }, Validators.required),
     createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
   })
-  
-  task$: Observable<Task> | null = null
+
 
   constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(switchMap((data) => {
-      const taskId: string = data['id']
-      return this.task$ = this.tasksService.getTaskById(taskId)
-    }), take(1)).subscribe()
+    this.activatedRoute.params.pipe(map((params) => params['id'] as string),
+      switchMap((taskId) => this.task$ = this.tasksService.getTaskById(taskId)),
+      take(1)).
+      subscribe()
   }
-
-
 }
