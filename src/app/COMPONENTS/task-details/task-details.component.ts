@@ -41,7 +41,7 @@ export class TaskDetailsComponent implements OnInit {
   ngOnInit() {
     this.task$ = this.activatedRoute.params.pipe(map((params) => params['id'] as string),
       switchMap((taskId) => this.tasksService.getTaskById(taskId)), tap(task => {
-        this.taskId = task.id,
+        this.taskId = task.id
         this.taskForm.patchValue({
           title: task.title,
           description: task.description,
@@ -55,7 +55,7 @@ export class TaskDetailsComponent implements OnInit {
     const updatedTaskDetails = this.taskForm.value
 
     this.task$ = this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
-      map(data => {
+      map(() => {
         this.editing = false
         this.taskForm.get('title')?.disable()
         this.taskForm.get('description')?.disable()
