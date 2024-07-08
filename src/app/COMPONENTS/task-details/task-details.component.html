@@ -3,24 +3,24 @@
         <mat-card-title>Task Details</mat-card-title>
     </mat-card-header>
     <br>
-    <form class="form" *ngIf="taskForm" [formGroup]="taskForm" (ngSubmit)="updateTaskDetails(task.id)">
+    <form class="form" *ngIf="taskForm" [formGroup]="taskForm" (ngSubmit)="updateTaskDetails()">
         <mat-card-content class="mat-card-content ">
             <mat-form-field appearance="fill">
-                <mat-label>{{task.title}}</mat-label>
+                <mat-label>Title</mat-label>
                 <input matInput formControlName="title" required>
                 <mat-error>
                     Title is required.
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>{{task.description}}</mat-label>
+                <mat-label>Description</mat-label>
                 <input matInput formControlName="description" required>
                 <mat-error>
                     Description is required.
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>{{task.type}}</mat-label>
+                <mat-label>Type</mat-label>
                 <mat-select formControlName="type">
                     <mat-option value="Personal">Personal</mat-option>
                     <mat-option value="Work">Work</mat-option>
@@ -28,7 +28,7 @@
                 <mat-error>Type is required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>{{task.status}}</mat-label>
+                <mat-label>Status</mat-label>
                 <mat-select formControlName="status">
                     <mat-option value="Personal">In progress</mat-option>
                     <mat-option value="Awaiting approval">Awaiting approval</mat-option>
@@ -37,7 +37,7 @@
                 <mat-error>Status is required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>Created: {{task.createdOn}}</mat-label>
+                <mat-label>Created</mat-label>
                 <input matInput formControlName="createdOn">
             </mat-form-field>
         </mat-card-content>
