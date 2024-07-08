@@ -24,7 +24,7 @@ export class TaskDetailsComponent implements OnInit {
 
   task$: Observable<Task> | null = null
   taskId: string = ""
-  editing: boolean = false;
+  editing: boolean = false
 
   taskForm: FormGroup = this.fb.group({
     title: new FormControl({ value: "", disabled: true }, Validators.required),
@@ -41,9 +41,8 @@ export class TaskDetailsComponent implements OnInit {
   ngOnInit() {
     this.task$ = this.activatedRoute.params.pipe(map((params) => params['id'] as string),
       switchMap((taskId) => this.tasksService.getTaskById(taskId)), tap(task => {
-        this.taskId = task.id
+        this.taskId = task.id,
         this.taskForm.patchValue({
-          id: task.id,
           title: task.title,
           description: task.description,
           type: task.type,
@@ -54,6 +53,7 @@ export class TaskDetailsComponent implements OnInit {
   }
   updateTaskDetails() {
     const updatedTaskDetails = this.taskForm.value
+
     this.task$ = this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
       map(data => {
         this.editing = false
@@ -61,7 +61,7 @@ export class TaskDetailsComponent implements OnInit {
         this.taskForm.get('description')?.disable()
         this.taskForm.get('status')?.disable()
         this.taskForm.get('type')?.disable()
-        return data
+        return this.tasksService.updateTask(updatedTaskDetails, this.taskId)
       }),
       catchError((err) => {
         this.editing = true
