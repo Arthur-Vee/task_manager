@@ -18,9 +18,7 @@ import { Router } from '@angular/router'
   styleUrl: './task.component.scss'
 })
 
-
 export class TaskComponent {
-
   availableTasks$ = this.taskService.getAllTasks()
 
   constructor(private taskService: TasksService, private router: Router) { }
@@ -28,8 +26,8 @@ export class TaskComponent {
   deleteTask(taskId: string) {
     this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
+
   sendToTaskDetails(task: Task) {
     this.router.navigate(['/task-details', task.id])
   }
-
 }
