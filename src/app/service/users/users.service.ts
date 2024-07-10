@@ -8,19 +8,16 @@ import { usersApiUrl } from '../../utils/constants'
   providedIn: 'root'
 })
 export class UsersService {
-  subject: BehaviorSubject<User[] | null> = new BehaviorSubject<User[] | null>(null)
-  users$ = this.subject.asObservable()
 
-  users: User[] = []
-
+  usersSubject: BehaviorSubject<User[] | null> = new BehaviorSubject<User[] | null>(null)
+  users$ = this.usersSubject.asObservable()
 
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
     var response = this.http.get<User[]>(usersApiUrl)
     response.pipe(take(1)).subscribe(users => {
-      this.subject.next(users)
-      this.users = users
+      this.usersSubject.next(users)
     })
     return response
   }
