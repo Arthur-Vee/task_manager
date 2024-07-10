@@ -1,11 +1,14 @@
-
-
 .task-card {
     margin: 16px 40px;
     padding: 0;
 }
-.mat-card-content{
+
+.mat-card-content {
     display: flex;
     flex-direction: column;
     width: 50%;
+}
+
+.success {
+    background-color: rgb(16, 166, 16);
 }
