@@ -74,11 +74,7 @@ export class TaskDetailsComponent implements OnInit {
         })
       },
       error: err => {
-        this.editing = true
-        this.taskForm.get('title')?.enable()
-        this.taskForm.get('description')?.enable()
-        this.taskForm.get('status')?.enable()
-        this.taskForm.get('type')?.enable()
+        this.allowTaskEdit()
       },
     })
   }
