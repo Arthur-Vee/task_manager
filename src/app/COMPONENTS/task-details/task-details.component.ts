@@ -34,7 +34,7 @@ export class TaskDetailsComponent implements OnInit {
     type: new FormControl({ value: "", disabled: true }, Validators.required),
     status: new FormControl({ value: "", disabled: true }, Validators.required),
     createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
-    assignedTo: new FormControl({ value: "UNASSIGNED", disabled: true })
+    assignedTo: new FormControl({ value: "", disabled: true })
   })
 
   constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private usersService: UsersService) { }
