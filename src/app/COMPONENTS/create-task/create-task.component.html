@@ -22,6 +22,15 @@
             </mat-select>
             <mat-error>Type is required</mat-error>
         </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Assigned To</mat-label>
+            <mat-select formControlName="assignedTo" placeholder="Asiggned to">
+                <mat-option value="UNASSIGNED"> Unassigned </mat-option>
+                <mat-option value={{user.id}} *ngFor="let user of users$ | async">{{user.firstName}} {{user.lastName}} - {{user.username}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    
         <br>
 
         <button mat-flat-button color="primary">Create Task</button>

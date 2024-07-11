@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 import { Observable, map, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
+import { UsersService } from '../../service/users/users.service'
 
 
 @Component({
@@ -23,6 +24,7 @@ import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } 
 export class TaskDetailsComponent implements OnInit {
 
   task$: Observable<Task | null> = this.tasksService.task$
+  users$ = this.usersService.getAllUsers()
   taskId: string = ""
   editing: boolean = false
 
@@ -32,9 +34,10 @@ export class TaskDetailsComponent implements OnInit {
     type: new FormControl({ value: "", disabled: true }, Validators.required),
     status: new FormControl({ value: "", disabled: true }, Validators.required),
     createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
+    assignedTo: new FormControl({ value: "", disabled: true })
   })
 
-  constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
+  constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private usersService: UsersService) { }
 
   ngOnInit() {
     this.activatedRoute.params.pipe(map((params) => params['id'] as string),
@@ -47,7 +50,8 @@ export class TaskDetailsComponent implements OnInit {
         description: task.description,
         type: task.type,
         status: task.status,
-        createdOn: task.createdOn
+        createdOn: task.createdOn,
+        assignedTo: task.assignedTo
       })
     })
   }
@@ -65,12 +69,14 @@ export class TaskDetailsComponent implements OnInit {
         this.taskForm.get('description')?.disable()
         this.taskForm.get('status')?.disable()
         this.taskForm.get('type')?.disable()
+        this.taskForm.get('assignedTo')?.disable()
         this.taskForm.patchValue({
           title: task.title,
           description: task.description,
           type: task.type,
           status: task.status,
-          createdOn: task.createdOn
+          createdOn: task.createdOn,
+          assignedTo: task.assignedTo
         })
       },
       error: err => {
@@ -85,5 +91,6 @@ export class TaskDetailsComponent implements OnInit {
     this.taskForm.get('description')?.enable()
     this.taskForm.get('status')?.enable()
     this.taskForm.get('type')?.enable()
+    this.taskForm.get('assignedTo')?.enable()
   }
 }

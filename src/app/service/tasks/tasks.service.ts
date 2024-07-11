@@ -37,7 +37,8 @@ export class TasksService {
       description: taskWithNewData.description,
       title: taskWithNewData.title,
       status: taskWithNewData.status,
-      type: taskWithNewData.type
+      type: taskWithNewData.type,
+      assignedTo: taskWithNewData.assignedTo
     }
     return this.http.patch<Task>(tasksApiUrl, body)
   }
