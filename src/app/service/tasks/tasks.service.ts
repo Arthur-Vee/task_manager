@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { Task } from '../models/task.model'
+import { Task } from '../../models/task.model'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
-import { tasksApiUrl } from '../utils/constants'
+import { tasksApiUrl } from '../../utils/constants'
 
 
 @Injectable({

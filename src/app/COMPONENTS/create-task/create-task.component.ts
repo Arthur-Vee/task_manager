@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { FormControl, FormGroup, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms'
 import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
-import { TasksService } from '../../service/tasks.service'
+import { TasksService } from '../../service/tasks/tasks.service'
 import { NgIf } from '@angular/common'
 import { take } from 'rxjs'
 import { Router } from '@angular/router'
@@ -34,7 +34,6 @@ export class CreateTaskComponent {
     })
   }
 
-
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
@@ -44,6 +43,6 @@ export class CreateTaskComponent {
       console.log("Task creation failed.")
     }
   }
-
+  
 }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
-import { TasksService } from '../../service/tasks.service'
+import { TasksService } from '../../service/tasks/tasks.service'
 import { ActivatedRoute } from '@angular/router'
 import { Observable, map, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
