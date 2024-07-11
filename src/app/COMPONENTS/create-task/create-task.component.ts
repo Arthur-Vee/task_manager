@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators, FormBuilder,ReactiveFormsModule } f
 import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks/tasks.service'
-import { NgIf } from '@angular/common'
+import { NgIf, NgFor, CommonModule } from '@angular/common'
 import { take } from 'rxjs'
 import { Router } from '@angular/router'
+import { UsersService } from '../../service/users/users.service'
 
 
 
@@ -17,6 +18,8 @@ import { Router } from '@angular/router'
     ReactiveFormsModule,
     MaterialModule,
     NgIf,
+    NgFor,
+    CommonModule
   ],
   templateUrl: './create-task.component.html',
   styleUrl: './create-task.component.scss'
@@ -24,13 +27,14 @@ import { Router } from '@angular/router'
 
 export class CreateTaskComponent {
   createTaskForm: FormGroup | null = null
+  users$ = this.userService.getAllUsers()
 
-  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router) {
-
+  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router, private userService:UsersService) {
     this.createTaskForm = this.fb.group({
       title: new FormControl("", Validators.required),
       description: new FormControl("", Validators.required),
       type: new FormControl("", Validators.required),
+      assignedTo: new FormControl ("UNASSIGNED")
     })
   }
 

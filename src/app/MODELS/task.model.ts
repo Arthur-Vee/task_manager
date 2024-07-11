@@ -5,4 +5,5 @@ export type Task = {
     type: string
     createdOn: Date
     status: string
+    assignedTo:string
 }
