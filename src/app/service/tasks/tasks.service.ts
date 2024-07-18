@@ -24,7 +24,7 @@ export class TasksService {
   }
 
   createNewTask(task: Task) {
-    return this.http.post<Task[]>(tasksApiUrl, task)
+    return this.http.post<Task>(tasksApiUrl, task)
   }
 
   deleteTask(taskId: string) {

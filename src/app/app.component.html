@@ -1,5 +1,15 @@
-<button mat-button type="button" routerLink="/" routerLinkActive="active">Home</button>
-<button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
-<button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
+<div class="navigation" *ngIf="isLoggedIn$ |async">
+    <div class="nav-buttons">
+        <button mat-button type="button" routerLink="/" routerLinkActive="active">Home</button>
+        <button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
+        <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
+    </div>
+    <div class="userDetails" *ngIf="user$ | async as user">
+       Welcome, {{user[0].firstName}} {{user[0].lastName}}
+       <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()"> Sign out
+       </button>
+    </div>
+
+</div>
 
 <router-outlet />

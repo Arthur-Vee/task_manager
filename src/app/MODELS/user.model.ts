@@ -4,3 +4,8 @@ export type User = {
     firstName: string,
     lastName: string,
 }
+
+export type UserLogin = {
+    id:string,
+    token:string
+}
