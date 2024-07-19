@@ -3,7 +3,7 @@ import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks/tasks.service'
 import { ActivatedRoute } from '@angular/router'
-import { Observable, Subscription, map, switchMap, take } from 'rxjs'
+import { Observable, map, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
 import { UsersService } from '../../service/users/users.service'
@@ -56,7 +56,7 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  updateTaskDetails(): Subscription | null {
+  updateTaskDetails() {
     const updatedTaskDetails = this.taskForm.value
 
     return this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
@@ -85,12 +85,12 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  allowTaskEdit(): boolean {
+  allowTaskEdit() {
+    this.editing = true
     this.taskForm.get('title')?.enable()
     this.taskForm.get('description')?.enable()
     this.taskForm.get('status')?.enable()
     this.taskForm.get('type')?.enable()
     this.taskForm.get('assignedTo')?.enable()
-    return this.editing = true
   }
 }

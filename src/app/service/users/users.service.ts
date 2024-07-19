@@ -20,7 +20,7 @@ export class UsersService {
   localStorage: Storage | undefined
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
-    this.localStorage = document.defaultView?.localStorage;
+    this.localStorage = document.defaultView?.localStorage
   }
 
   getAllUsers(): Observable<User[]> {
@@ -33,7 +33,9 @@ export class UsersService {
         next: data => {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
-          this.getUser()
+          this.getUser().pipe(take(1)).subscribe(data => {
+            this.userSubject.next(data)
+          })
           this.isLoggedInSubject.next(data.token)
         },
         error: err => {
@@ -53,14 +55,11 @@ export class UsersService {
     this.router.navigate(["/login"])
   }
 
-  getUser(): Observable<User> | null | undefined {
+  getUser() {
     var id = this.localStorage?.getItem("id")
     var body = {
       token: this.localStorage?.getItem("token")
     }
-    this.http.post<User[]>(usersApiUrl + id, body).pipe(take(1)).subscribe(data => {
-      this.userSubject.next(data)
-    })
-    return
+    return this.http.post<User[]>(usersApiUrl + id, body)
   }
 }
