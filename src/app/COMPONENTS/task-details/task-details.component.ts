@@ -56,7 +56,7 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  updateTaskDetails(): Subscription | null {
+  updateTaskDetails() {
     const updatedTaskDetails = this.taskForm.value
 
     return this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
@@ -85,12 +85,12 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  allowTaskEdit(): boolean {
+  allowTaskEdit() {
+    this.editing = true
     this.taskForm.get('title')?.enable()
     this.taskForm.get('description')?.enable()
     this.taskForm.get('status')?.enable()
     this.taskForm.get('type')?.enable()
     this.taskForm.get('assignedTo')?.enable()
-    return this.editing = true
   }
 }

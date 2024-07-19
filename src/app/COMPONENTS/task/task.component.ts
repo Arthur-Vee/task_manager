@@ -24,7 +24,7 @@ export class TaskComponent {
 
   constructor(private taskService: TasksService, private router: Router) { }
 
-  deleteTask(taskId: string): Observable<Task[]> {
+  deleteTask(taskId: string) {
     return this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
 

@@ -6,7 +6,7 @@ import { MaterialModule } from './material.module'
 import { CommonModule } from '@angular/common'
 import { LoginPageComponent } from './components/login-page/login-page.component'
 import { UsersService } from './service/users/users.service'
-import { Observable } from 'rxjs'
+import { Observable, take } from 'rxjs'
 import { User } from './models/user.model'
 
 
@@ -39,7 +39,11 @@ export class AppComponent {
   constructor(private usersService: UsersService) { }
 
   ngOnInit() {
-    this.usersService.getUser()
+    this.usersService.getUser().pipe(take(1)).subscribe(
+      data => {
+        this.usersService.userSubject.next(data)
+      }
+    )
   }
   signOut(): void {
     this.usersService.signOutUser()

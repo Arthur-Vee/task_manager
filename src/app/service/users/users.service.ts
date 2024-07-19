@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { User, UserLogin } from '../../models/user.model'
+import { User, UserLogin, UserRegistration } from '../../models/user.model'
 import { BehaviorSubject, Observable, take, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
@@ -33,8 +33,13 @@ export class UsersService {
         next: data => {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
-          this.getUser()
+          this.getUser().pipe(take(1)).subscribe(
+            data => {
+              this.userSubject.next(data)
+            }
+          )
           this.isLoggedInSubject.next(data.token)
+          console.log("inside signIn token setter")
         },
         error: err => {
           return err
@@ -43,8 +48,9 @@ export class UsersService {
     ))
   }
 
-  isUserSignedIn(): string | null | undefined {
-    return this.localStorage?.getItem("isLoggedIn")
+  isUserSignedIn(): string {
+    var isLoggedIn: string = this.localStorage?.getItem("isLoggedIn") as string
+    return isLoggedIn
   }
 
   signOutUser(): void {
@@ -53,14 +59,32 @@ export class UsersService {
     this.router.navigate(["/login"])
   }
 
-  getUser(): Observable<User> | null | undefined {
+  getUser() {
     var id = this.localStorage?.getItem("id")
     var body = {
       token: this.localStorage?.getItem("token")
     }
-    this.http.post<User[]>(usersApiUrl + id, body).pipe(take(1)).subscribe(data => {
-      this.userSubject.next(data)
-    })
-    return
+    return this.http.post<User[]>(usersApiUrl + id, body)
+  }
+
+  registerUser(userData: UserRegistration) {
+    this.http.post<UserLogin>(usersApiUrl, userData).pipe(take(1)
+    ).subscribe(
+      {
+        next: data => {
+          localStorage.setItem("id", data.id),
+            localStorage.setItem("isLoggedIn", data.token)
+          this.getUser().pipe(take(1)).subscribe(
+            data => {
+              this.userSubject.next(data)
+            }
+          )
+          this.router.navigate(["tasks-list"])
+        },
+        error: err => {
+          return err
+        }
+      }
+    )
   }
 }
