@@ -39,7 +39,6 @@ export class UsersService {
             }
           )
           this.isLoggedInSubject.next(data.token)
-          console.log("inside signIn token setter")
         },
         error: err => {
           return err
