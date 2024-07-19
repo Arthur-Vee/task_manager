@@ -23,8 +23,8 @@ export class TaskComponent {
 
   constructor(private taskService: TasksService, private router: Router) { }
 
-  deleteTask(taskId: string) {
-    return this.availableTasks$ = this.taskService.deleteTask(taskId)
+  deleteTask(taskId: string): void {
+    this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
 
   sendToTaskDetails(task: Task): void {

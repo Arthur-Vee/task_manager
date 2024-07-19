@@ -55,7 +55,7 @@ export class UsersService {
     this.router.navigate(["/login"])
   }
 
-  getUser() {
+  getUser(): Observable<User[]> {
     var id = this.localStorage?.getItem("id")
     var body = {
       token: this.localStorage?.getItem("token")

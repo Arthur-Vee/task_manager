@@ -32,9 +32,8 @@ export class LoginPageComponent {
     })
   }
 
-  signIn() {
-
-    return this.userService.signInUser(this.loginForm?.value).pipe(take(1)
+  signIn(): void {
+    this.userService.signInUser(this.loginForm?.value).pipe(take(1)
     ).subscribe({
       next: () => {
         this.loginForm?.setErrors(null)
