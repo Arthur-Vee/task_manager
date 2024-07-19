@@ -23,15 +23,15 @@ export class TasksService {
     return this.http.get<Task>(tasksApiUrl + taskId)
   }
 
-  createNewTask(task: Task) {
+  createNewTask(task: Task): Observable<Task> {
     return this.http.post<Task>(tasksApiUrl, task)
   }
 
-  deleteTask(taskId: string) {
+  deleteTask(taskId: string): Observable<Task[]> {
     return this.http.delete<Task[]>(tasksApiUrl + taskId)
   }
 
-  updateTask(taskWithNewData: Task, taskId: string) {
+  updateTask(taskWithNewData: Task, taskId: string): Observable<Task> {
     const body = {
       id: taskId,
       description: taskWithNewData.description,

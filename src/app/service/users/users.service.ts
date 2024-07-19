@@ -14,14 +14,15 @@ export class UsersService {
   userSubject: BehaviorSubject<User[] | null> = new BehaviorSubject<User[] | null>(null)
   user$: Observable<User[] | null> = this.userSubject.asObservable()
 
-  isLoogedInSubject: BehaviorSubject<String | null> = new BehaviorSubject<String | null>(null)
-  isLoggedIn$: Observable<String | null> = this.isLoogedInSubject.asObservable()
+  isLoggedInSubject: BehaviorSubject<String | null> = new BehaviorSubject<String | null>(null)
+  isLoggedIn$: Observable<String | null> = this.isLoggedInSubject.asObservable()
 
   localStorage: Storage | undefined
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
     this.localStorage = document.defaultView?.localStorage;
   }
+
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(usersApiUrl)
   }
@@ -33,7 +34,7 @@ export class UsersService {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
           this.getUser()
-          this.isLoogedInSubject.next(data.token)
+          this.isLoggedInSubject.next(data.token)
         },
         error: err => {
           return err
@@ -42,17 +43,17 @@ export class UsersService {
     ))
   }
 
-  isUserSignedIn() {
+  isUserSignedIn(): string | null | undefined {
     return this.localStorage?.getItem("isLoggedIn")
   }
 
-  signOutUser() {
+  signOutUser(): void {
     localStorage.clear()
-    this.isLoogedInSubject.next(null)
+    this.isLoggedInSubject.next(null)
     this.router.navigate(["/login"])
   }
 
-  getUser() {
+  getUser(): Observable<User> | null | undefined {
     var id = this.localStorage?.getItem("id")
     var body = {
       token: this.localStorage?.getItem("token")

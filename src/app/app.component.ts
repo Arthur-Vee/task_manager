@@ -1,12 +1,12 @@
 import { Component } from '@angular/core'
-import { RouterOutlet, RouterLink, Router } from '@angular/router'
+import { RouterOutlet, RouterLink } from '@angular/router'
 import { ReactiveFormsModule } from '@angular/forms'
 import { TaskComponent } from './components/task/task.component'
 import { MaterialModule } from './material.module'
 import { CommonModule } from '@angular/common'
 import { LoginPageComponent } from './components/login-page/login-page.component'
 import { UsersService } from './service/users/users.service'
-import { Observable} from 'rxjs'
+import { Observable } from 'rxjs'
 import { User } from './models/user.model'
 
 
@@ -36,12 +36,12 @@ export class AppComponent {
   isLoggedIn$: Observable<String | null> = this.usersService.isLoggedIn$
   user$: Observable<User[] | null> = this.usersService.user$
 
-  constructor(private usersService: UsersService, private router: Router,) { }
-  signOut() {
-    this.usersService.signOutUser()
-  }
+  constructor(private usersService: UsersService) { }
 
   ngOnInit() {
     this.usersService.getUser()
+  }
+  signOut(): void {
+    this.usersService.signOutUser()
   }
 }

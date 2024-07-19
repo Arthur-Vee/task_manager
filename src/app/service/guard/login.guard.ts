@@ -8,7 +8,6 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
   if (authService.isUserSignedIn()) {
     router.navigate(['/tasks-list'])
-    return true
   }
   return true
 };

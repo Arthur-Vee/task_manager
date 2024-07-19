@@ -6,6 +6,6 @@ export type User = {
 }
 
 export type UserLogin = {
-    id:string,
-    token:string
+    id: string,
+    token: string
 }

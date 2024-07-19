@@ -4,7 +4,7 @@ import { TasksService } from '../../service/tasks/tasks.service'
 import { NgFor, NgIf, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
-import { UsersService } from '../../service/users/users.service'
+import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-task',
@@ -22,13 +22,13 @@ import { UsersService } from '../../service/users/users.service'
 export class TaskComponent {
   availableTasks$ = this.taskService.getAllTasks()
 
-  constructor(private taskService: TasksService, private router: Router,private usersService:UsersService) { }
+  constructor(private taskService: TasksService, private router: Router) { }
 
-  deleteTask(taskId: string) {
-    this.availableTasks$ = this.taskService.deleteTask(taskId)
+  deleteTask(taskId: string): Observable<Task[]> {
+    return this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
 
-  sendToTaskDetails(task: Task) {
+  sendToTaskDetails(task: Task): void {
     this.router.navigate(['/task-details', task.id])
   }
 }
