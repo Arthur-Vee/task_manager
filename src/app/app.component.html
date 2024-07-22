@@ -4,7 +4,7 @@
         <button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
         <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
     </div>
-    <div class="userDetails" *ngIf="this.user$ | async as user">
+    <div class="userDetails" *ngIf="user$ | async as user">
         Welcome, {{user.firstName}} {{user.lastName}}
         <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()"> Sign out
         </button>

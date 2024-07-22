@@ -55,7 +55,6 @@ export class UsersService {
     localStorage.clear()
     this.isLoggedInSubject.next(null)
     this.router.navigate(["/login"])
-    window.location.reload()
   }
 
   getUser(): Observable<User> {

@@ -9,11 +9,6 @@ import { UsersService } from './service/users/users.service'
 import { Observable, take } from 'rxjs'
 import { User } from './models/user.model'
 
-
-
-
-
-
 @Component({
   selector: 'app-root',
   standalone: true,
