@@ -63,8 +63,8 @@ export class UsersService {
   }
 
   registerUser(userData: UserRegistration) {
-    this.http.post<UserLogin>(usersApiUrl, userData).pipe(take(1)
-    ).subscribe(
+    this.http.post<UserLogin>(usersApiUrl, userData).pipe(
+    tap(
       {
         next: data => {
           localStorage.setItem("id", data.id),
@@ -80,6 +80,6 @@ export class UsersService {
         tap((data) => {
           this.userSubject.next(data) // This can be improved
         }))
-    })
+    }))
   }
 }
