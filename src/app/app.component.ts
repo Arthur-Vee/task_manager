@@ -34,16 +34,22 @@ export class AppComponent {
   title = 'Task Manager'
 
   isLoggedIn$: Observable<String | null> = this.usersService.isLoggedIn$
-  user$: Observable<User[] | null> = this.usersService.user$
+  user$: Observable<User | null> = this.usersService.user$
 
-  constructor(private usersService: UsersService) { }
-
-  ngOnInit() {
-    this.usersService.getUser().pipe(take(1)).subscribe(data => {
-      this.usersService.userSubject.next(data)
-    })
+  constructor(private usersService: UsersService) {
+    this.usersService.getUser().pipe(take(1)).subscribe(
+      data => {
+        this.usersService.userSubject.next(data)
+      }
+    )
   }
   signOut(): void {
     this.usersService.signOutUser()
+  }
+  checkUserValue() {
+    console.log(this.user$)
+  }
+  checkUserValueInService() {
+    console.log(this.usersService.user$)
   }
 }
