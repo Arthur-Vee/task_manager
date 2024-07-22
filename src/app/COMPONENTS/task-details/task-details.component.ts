@@ -56,7 +56,7 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  updateTaskDetails() {
+  updateTaskDetails(): void {
     const updatedTaskDetails = this.taskForm.value
 
     this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
@@ -85,7 +85,7 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  allowTaskEdit() {
+  allowTaskEdit(): void {
     this.editing = true
     this.taskForm.get('title')?.enable()
     this.taskForm.get('description')?.enable()

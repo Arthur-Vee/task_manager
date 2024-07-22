@@ -4,8 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { TaskComponent } from './components/task/task.component'
 import { MaterialModule } from './material.module'
 import { CommonModule } from '@angular/common'
-
-
+import { LoginPageComponent } from './components/login-page/login-page.component'
+import { UsersService } from './service/users/users.service'
+import { Observable, take } from 'rxjs'
+import { User } from './models/user.model'
 
 @Component({
   selector: 'app-root',
@@ -17,6 +19,7 @@ import { CommonModule } from '@angular/common'
     TaskComponent,
     MaterialModule,
     CommonModule,
+    LoginPageComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -24,6 +27,18 @@ import { CommonModule } from '@angular/common'
 
 export class AppComponent {
   title = 'Task Manager'
-  constructor() { }
 
+  isLoggedIn$: Observable<String | null> = this.usersService.isLoggedIn$
+  user$: Observable<User | null> = this.usersService.user$
+
+  constructor(private usersService: UsersService) {
+    this.usersService.getUser().pipe(take(1)).subscribe(
+      data => {
+        this.usersService.userSubject.next(data)
+      }
+    )
+  }
+  signOut(): void {
+    this.usersService.signOutUser()
+  }
 }
