@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { CommonModule, isPlatformServer } from '@angular/common'
 import { UsersService } from '../../service/users/users.service'
 import { take } from 'rxjs'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-login-page',
@@ -13,6 +13,7 @@ import { Router } from '@angular/router'
     MaterialModule,
     CommonModule,
     ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { User, UserLogin, LoginForm } from '../../models/user.model'
-import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs'
+import { LoginForm, User, UserLogin, UserRegistration } from '../../models/user.model'
+import { BehaviorSubject, Observable, switchMap, take, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Router } from '@angular/router'
@@ -34,9 +34,6 @@ export class UsersService {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
           this.isLoggedInSubject.next(data.token)
-        },
-        error: err => {
-          return err
         }
       }
     ), switchMap(() => {
@@ -47,8 +44,8 @@ export class UsersService {
     }))
   }
 
-  isUserSignedIn(): string | null | undefined {
-    return this.localStorage?.getItem("isLoggedIn")
+  isUserSignedIn(): string {
+    return this.localStorage?.getItem("isLoggedIn") as string
   }
 
   signOutUser(): void {
@@ -63,5 +60,26 @@ export class UsersService {
       token: this.localStorage?.getItem("token")
     }
     return this.http.post<User>(usersApiUrl + id, body)
+  }
+
+  registerUser(userData: UserRegistration) {
+    this.http.post<UserLogin>(usersApiUrl, userData).pipe(
+    tap(
+      {
+        next: data => {
+          localStorage.setItem("id", data.id),
+            localStorage.setItem("isLoggedIn", data.token)
+          this.router.navigate(["tasks-list"])
+        },
+        error: err => {
+          return err
+        }
+      }
+    ), switchMap(() => {
+      return this.getUser().pipe(
+        tap((data) => {
+          this.userSubject.next(data) // This can be improved
+        }))
+    }))
   }
 }
