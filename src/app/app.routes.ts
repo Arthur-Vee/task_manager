@@ -12,7 +12,7 @@ export const routes: Routes = [
     { path: "create-task", canActivate: [authGuard], component: CreateTaskComponent },
     { path: "tasks-list", canActivate: [authGuard], component: TaskComponent },
     { path: "task-details/:id", canActivate: [authGuard], component: TaskDetailsComponent },
-    { path: "register", component: RegistrationPageComponent },
+    { path: "register",canActivate: [loginGuard], component: RegistrationPageComponent },
     { path: "login", canActivate: [loginGuard], component: LoginPageComponent },
     //  { path: '**', component: PageNotFoundComponent}
 

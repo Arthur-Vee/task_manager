@@ -33,11 +33,6 @@ export class UsersService {
         next: data => {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
-          this.getUser().pipe(take(1)).subscribe(
-            data => {
-              this.userSubject.next(data)
-            }
-          )
           this.isLoggedInSubject.next(data.token)
         }
       }
@@ -50,8 +45,7 @@ export class UsersService {
   }
 
   isUserSignedIn(): string {
-    var isLoggedIn: string = this.localStorage?.getItem("isLoggedIn") as string
-    return isLoggedIn
+    return this.localStorage?.getItem("isLoggedIn") as string
   }
 
   signOutUser(): void {
@@ -75,17 +69,17 @@ export class UsersService {
         next: data => {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
-          this.getUser().pipe(take(1)).subscribe(
-            data => {
-              this.userSubject.next(data)
-            }
-          )
           this.router.navigate(["tasks-list"])
         },
         error: err => {
           return err
         }
       }
-    )
+    ), switchMap(() => {
+      return this.getUser().pipe(
+        tap((data) => {
+          this.userSubject.next(data) // This can be improved
+        }))
+    })
   }
 }
