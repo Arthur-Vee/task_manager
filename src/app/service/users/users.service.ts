@@ -39,9 +39,6 @@ export class UsersService {
             }
           )
           this.isLoggedInSubject.next(data.token)
-        },
-        error: err => {
-          return err
         }
       }
     ))
