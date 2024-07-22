@@ -16,3 +16,8 @@ export type UserRegistration = {
     firstName: string
     lastName: string
 }
+
+export type LoginForm = {
+    username: string,
+    password: string
+}

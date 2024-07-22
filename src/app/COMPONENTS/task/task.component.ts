@@ -4,7 +4,6 @@ import { TasksService } from '../../service/tasks/tasks.service'
 import { NgFor, NgIf, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
-import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-task',
@@ -24,7 +23,7 @@ export class TaskComponent {
 
   constructor(private taskService: TasksService, private router: Router) { }
 
-  deleteTask(taskId: string):void {
+  deleteTask(taskId: string): void {
     this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
 

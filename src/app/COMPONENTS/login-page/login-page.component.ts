@@ -3,7 +3,7 @@ import { MaterialModule } from '../../material.module'
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { CommonModule, isPlatformServer } from '@angular/common'
 import { UsersService } from '../../service/users/users.service'
-import { Subscription, take } from 'rxjs'
+import { take } from 'rxjs'
 import { Router, RouterLink } from '@angular/router'
 
 @Component({
@@ -33,8 +33,8 @@ export class LoginPageComponent {
     })
   }
 
-  signIn() {
-    return this.userService.signInUser(this.loginForm?.value).pipe(take(1)
+  signIn(): void {
+    this.userService.signInUser(this.loginForm?.value).pipe(take(1)
     ).subscribe({
       next: () => {
         this.loginForm?.setErrors(null)

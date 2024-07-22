@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { User, UserLogin, UserRegistration } from '../../models/user.model'
-import { BehaviorSubject, Observable, take, tap } from 'rxjs'
+import { LoginForm, User, UserLogin, UserRegistration } from '../../models/user.model'
+import { BehaviorSubject, Observable, switchMap, take, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Router } from '@angular/router'
@@ -11,8 +11,8 @@ import { Router } from '@angular/router'
 })
 export class UsersService {
 
-  userSubject: BehaviorSubject<User[] | null> = new BehaviorSubject<User[] | null>(null)
-  user$: Observable<User[] | null> = this.userSubject.asObservable()
+  userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null)
+  user$: Observable<User | null> = this.userSubject.asObservable()
 
   isLoggedInSubject: BehaviorSubject<String | null> = new BehaviorSubject<String | null>(null)
   isLoggedIn$: Observable<String | null> = this.isLoggedInSubject.asObservable()
@@ -20,14 +20,14 @@ export class UsersService {
   localStorage: Storage | undefined
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
-    this.localStorage = document.defaultView?.localStorage;
+    this.localStorage = document.defaultView?.localStorage
   }
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(usersApiUrl)
   }
 
-  signInUser(data: {}): Observable<UserLogin> {
+  signInUser(data: LoginForm): Observable<User> {
     return this.http.post<UserLogin>(loginApiUrl, data).pipe(tap(
       {
         next: data => {
@@ -41,7 +41,12 @@ export class UsersService {
           this.isLoggedInSubject.next(data.token)
         }
       }
-    ))
+    ), switchMap(() => {
+      return this.getUser().pipe(
+        tap((data) => {
+          this.userSubject.next(data) // This can be improved
+        }))
+    }))
   }
 
   isUserSignedIn(): string {
@@ -55,12 +60,12 @@ export class UsersService {
     this.router.navigate(["/login"])
   }
 
-  getUser() {
+  getUser(): Observable<User> {
     var id = this.localStorage?.getItem("id")
     var body = {
       token: this.localStorage?.getItem("token")
     }
-    return this.http.post<User[]>(usersApiUrl + id, body)
+    return this.http.post<User>(usersApiUrl + id, body)
   }
 
   registerUser(userData: UserRegistration) {
