@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { User, UserLogin, LoginForm } from '../../models/user.model'
-import { BehaviorSubject, Observable, switchMap, take, tap } from 'rxjs'
+import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Router } from '@angular/router'

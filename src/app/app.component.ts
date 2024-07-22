@@ -46,10 +46,4 @@ export class AppComponent {
   signOut(): void {
     this.usersService.signOutUser()
   }
-  checkUserValue() {
-    console.log(this.user$)
-  }
-  checkUserValueInService() {
-    console.log(this.usersService.user$)
-  }
 }

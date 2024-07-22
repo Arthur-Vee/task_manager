@@ -3,8 +3,6 @@
         <button mat-button type="button" routerLink="/" routerLinkActive="active">Home</button>
         <button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
         <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
-        <button mat-button type="button" (click)="checkUserValue()"> Check User Value </button>
-        <button mat-button type="button" (click)="checkUserValueInService()"> Check UserService Value </button>
     </div>
     <div class="userDetails" *ngIf="this.user$ | async as user">
         Welcome, {{user.firstName}} {{user.lastName}}
