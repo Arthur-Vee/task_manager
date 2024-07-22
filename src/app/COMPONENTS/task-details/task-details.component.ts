@@ -56,10 +56,10 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  updateTaskDetails() {
+  updateTaskDetails(): void {
     const updatedTaskDetails = this.taskForm.value
 
-    return this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
+    this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
       take(1)
     ).subscribe({
       next: task => {
@@ -85,7 +85,7 @@ export class TaskDetailsComponent implements OnInit {
     })
   }
 
-  allowTaskEdit() {
+  allowTaskEdit(): void {
     this.editing = true
     this.taskForm.get('title')?.enable()
     this.taskForm.get('description')?.enable()

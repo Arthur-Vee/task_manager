@@ -17,21 +17,18 @@ import { UsersService } from '../../service/users/users.service';
   styleUrl: './registration-page.component.scss'
 })
 export class RegistrationPageComponent {
-  registrationForm: FormGroup | null = null
+  registrationForm: FormGroup = this.fb.group({
+    username: new FormControl("", Validators.required),
+    password: new FormControl("", Validators.required),
+    firstName: new FormControl("", Validators.required),
+    lastName: new FormControl("", Validators.required),
+  })
 
-  constructor(private fb: FormBuilder, private usersService: UsersService) {
-    this.registrationForm = this.fb.group({
-      username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required),
-      firstName: new FormControl("", Validators.required),
-      lastName: new FormControl("", Validators.required),
-    })
-  }
+  constructor(private fb: FormBuilder, private usersService: UsersService) {}
 
   registerUser(userData: UserRegistration) {
     if (this.registrationForm?.valid) {
       this.usersService.registerUser(userData)
     }
-    return
   }
 }
