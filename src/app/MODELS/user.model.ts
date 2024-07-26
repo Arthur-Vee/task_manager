@@ -3,6 +3,7 @@ export type User = {
     username: string
     firstName: string
     lastName: string
+    roles: string[]
 }
 
 export type UserLogin = {
@@ -20,4 +21,8 @@ export type UserRegistration = {
 export type LoginForm = {
     username: string,
     password: string
+}
+export type UpdateUserRoles = {
+    updatedUserId: string | null,
+    updatedUserRoles: string[] | null
 }

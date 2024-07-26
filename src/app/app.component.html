@@ -1,15 +1,19 @@
 <div class="navigation" *ngIf="isLoggedIn$ |async">
-    <div class="nav-buttons">
-        <button mat-button type="button" routerLink="/" routerLinkActive="active">Home</button>
-        <button mat-button type="button" routerLink="/create-task" routerLinkActive="active"> Create task </button>
-        <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
-    </div>
     <div class="userDetails" *ngIf="user$ | async as user">
-        Welcome, {{user.firstName}} {{user.lastName}}
-        <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()"> Sign out
-        </button>
+        <div class="nav-buttons">
+            <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
+            <button *ngIf="user.roles.includes('ADMIN')" mat-button type="button" routerLink="/users"
+                routerLinkActive="active"> Users List</button>
+            <button *ngIf="user.roles.includes('ADMIN')" mat-button type="button" routerLink="/create-task"
+                routerLinkActive="active"> Create task
+            </button>
+
+        </div>
+        <div class="navigation">
+            Welcome, {{user.firstName}} {{user.lastName}}
+            <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()"> Sign out
+            </button>
+        </div>
     </div>
-
 </div>
-
 <router-outlet />
