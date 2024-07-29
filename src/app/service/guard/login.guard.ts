@@ -10,4 +10,4 @@ export const loginGuard: CanActivateFn = (route, state) => {
     router.navigate(['/tasks-list'])
   }
   return true
-};
+}

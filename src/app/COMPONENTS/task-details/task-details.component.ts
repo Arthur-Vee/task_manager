@@ -28,6 +28,8 @@ export class TaskDetailsComponent implements OnInit {
   taskId: string = ""
   editing: boolean = false
 
+  currentUserRoles: string[] | null = null
+
   taskForm: FormGroup = this.fb.group({
     title: new FormControl({ value: "", disabled: true }, Validators.required),
     description: new FormControl({ value: "", disabled: true }, Validators.required),
@@ -54,6 +56,10 @@ export class TaskDetailsComponent implements OnInit {
         assignedTo: task.assignedTo
       })
     })
+    this.usersService.getUser().pipe(take(1)).subscribe(
+      data => {
+        return this.currentUserRoles = data?.roles
+      })
   }
 
   updateTaskDetails(): void {
@@ -86,11 +92,17 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   allowTaskEdit(): void {
-    this.editing = true
-    this.taskForm.get('title')?.enable()
-    this.taskForm.get('description')?.enable()
-    this.taskForm.get('status')?.enable()
-    this.taskForm.get('type')?.enable()
-    this.taskForm.get('assignedTo')?.enable()
+    if (this.currentUserRoles?.includes('MANAGER')) {
+      this.taskForm.get('assignedTo')?.enable()
+      this.editing = true
+    }
+    if (this.currentUserRoles?.includes('ADMIN')) {
+      this.editing = true
+      this.taskForm.get('title')?.enable()
+      this.taskForm.get('description')?.enable()
+      this.taskForm.get('status')?.enable()
+      this.taskForm.get('type')?.enable()
+      this.taskForm.get('assignedTo')?.enable()
+    }
   }
 }

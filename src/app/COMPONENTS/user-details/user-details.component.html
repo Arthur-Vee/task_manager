@@ -1,0 +1,22 @@
+<mat-card class="card" appearance="outlined" *ngIf="individualUser$ | async as user" onsubmit=" ">
+    <mat-card-header>
+        <mat-card-title> {{user.firstName}} {{user.lastName}}</mat-card-title>
+    </mat-card-header>
+    <form class="form" *ngIf="userDetailsForm" [formGroup]="userDetailsForm"
+        (ngSubmit)="updateUserRole(userDetailsForm.value)">
+        <mat-form-field *ngIf="assigning" appearance="fill">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="assignedUserRole">
+                <mat-option>None</mat-option>
+                <mat-option value="defaultRole" disabled="true">User (default)</mat-option>
+                <mat-option value="MANAGER" [disabled]="!assigning">Manager</mat-option>
+            </mat-select>
+            <mat-error>Role is required</mat-error>
+        </mat-form-field>
+        <mat-card-actions>
+            <button *ngIf="!assigning" id="editButton" mat-flat-button color="primary" type="button"
+                (click)="editUserRole()">Edit</button>
+            <button *ngIf="assigning" id="saveButton" mat-flat-button class="success" type="submit">Save</button>
+        </mat-card-actions>
+    </form>
+</mat-card>

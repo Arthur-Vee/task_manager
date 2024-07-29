@@ -1,9 +1,12 @@
-.navigation{
+.navigation {
     display: flex;
+    align-items: center;
+}
+
+.userDetails {
+    display: flex;
+    margin: 0 auto;
+    width: 96%;
     align-items: center;
     justify-content: space-between;
-}
-.userDetails{
-    display: flex;
-    align-items: center;
 }

@@ -54,11 +54,11 @@
 
         <br>
 
-        <mat-card-actions>
+        <mat-card-actions *ngIf="currentUserRoles?.includes('MANAGER'||'ADMIN')">
             <button *ngIf="!editing" id="editButton" mat-flat-button color="primary" type="button"
                 (click)="allowTaskEdit()">Edit</button>
             <button *ngIf="editing" id="saveButton" mat-flat-button class="success" type="submit">Save</button>
         </mat-card-actions>
-        
+
     </form>
 </mat-card>
