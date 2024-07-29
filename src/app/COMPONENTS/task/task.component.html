@@ -1,6 +1,6 @@
 <ul>
     <li *ngFor="let task of availableTasks$ | async">
-        <mat-card class="task-card" appearance="outlined" *ngIf="currentUser$| async as user">
+        <mat-card class="task-card" appearance="outlined" *ngIf="currentUser$ | async as currentUser">
             <mat-card-header>
                 <mat-card-title class="task-title" (click)="sendToTaskDetails(task)">Task:
                     {{task.title}}</mat-card-title>
@@ -14,7 +14,7 @@
                 <p>Task type: {{task.type}}</p>
                 <p>Status: {{task.status}}</p>
                 <p>Created on: {{task.createdOn}}</p>
-                <button *ngIf="user.roles.includes('ADMIN')" id="deleteButton" mat-flat-button
+                <button *ngIf="currentUser.roles.includes('ADMIN')" id="deleteButton" mat-flat-button
                     (click)="deleteTask(task.id)">Delete task</button>
                 <button id="detailsButton" mat-flat-button router (click)="sendToTaskDetails(task)">Task
                     details</button>

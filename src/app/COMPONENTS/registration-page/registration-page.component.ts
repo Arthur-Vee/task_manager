@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { MaterialModule } from '../../material.module';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { User, UserRegistration } from '../../models/user.model';
-import { UsersService } from '../../service/users/users.service';
+import { Component } from '@angular/core'
+import { MaterialModule } from '../../material.module'
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { CommonModule } from '@angular/common'
+import { User, UserRegistration } from '../../models/user.model'
+import { UsersService } from '../../service/users/users.service'
 
 @Component({
   selector: 'app-registration-page',

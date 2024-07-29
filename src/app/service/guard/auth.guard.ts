@@ -9,15 +9,15 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router)
 
   authService.getUser().pipe(take(1)).subscribe(
-    data => {
-      var requiredRoles = route.data['roles']
+    currentUser => {
+      let requiredRoles = route.data['requiredRoles']
       if (!authService.isUserSignedIn()) {
         router.navigate(['/login'])
         return of(false)
       }
       if (requiredRoles) {
-        var hasRequiredRole = requiredRoles.some((role: string) => data?.roles.includes(role))
-        if (!hasRequiredRole) {
+        let userHaveRequiredRole = requiredRoles.some((requiredRole: string) => currentUser?.roles.includes(requiredRole))
+        if (!userHaveRequiredRole) {
           router.navigate(['/tasks-list'])
           return of(false)
         }
@@ -26,4 +26,4 @@ export const authGuard: CanActivateFn = async (route, state) => {
     })
   authService.isLoggedInSubject.next(authService.isUserSignedIn() as string)
   return true
-};
+}

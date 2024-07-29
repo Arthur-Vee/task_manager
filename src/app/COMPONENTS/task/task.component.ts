@@ -5,6 +5,8 @@ import { NgFor, NgIf, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
 import { UsersService } from '../../service/users/users.service'
+import { User } from '../../models/user.model'
+import { filter, map } from 'rxjs'
 
 @Component({
   selector: 'app-task',
@@ -21,14 +23,14 @@ import { UsersService } from '../../service/users/users.service'
 
 export class TaskComponent {
   availableTasks$ = this.taskService.getAllTasks()
-  currentUser$ = this.usersService.getUser()
 
-  constructor(private taskService: TasksService, private router: Router, private usersService:UsersService) { }
+  currentUser$ = this.usersService.user$.pipe(filter(currentUser => !!currentUser), map(currentUser => currentUser as User))
+
+  constructor(private taskService: TasksService, private router: Router, private usersService: UsersService) { }
 
   deleteTask(taskId: string): void {
     this.availableTasks$ = this.taskService.deleteTask(taskId)
   }
-
   sendToTaskDetails(task: Task): void {
     this.router.navigate(['/task-details', task.id])
   }

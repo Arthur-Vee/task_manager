@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { LoginForm, UpdateUserRoles, User, UserLogin, UserRegistration } from '../../models/user.model'
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs'
+import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Router } from '@angular/router'
@@ -21,8 +21,13 @@ export class UsersService {
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
     this.localStorage = document.defaultView?.localStorage
-  }
 
+    this.getUser().pipe(take(1)).subscribe(
+      user => {
+        this.userSubject.next(user)
+      }
+    )
+  }
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(usersApiUrl)
   }
@@ -58,7 +63,8 @@ export class UsersService {
   signOutUser(): void {
     localStorage.clear()
     this.router.navigate(["/login"])
-    window.location.reload()
+    this.isLoggedInSubject.next(null)
+    this.userSubject.next(null)
   }
 
   getUser(): Observable<User> {

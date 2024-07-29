@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { MaterialModule } from '../../material.module'
 import { UsersService } from '../../service/users/users.service'
 import { ActivatedRoute } from '@angular/router'
-import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs'
+import { map, Observable, switchMap, tap } from 'rxjs'
 import { User, UpdateUserRoles } from '../../models/user.model'
 import { CommonModule } from '@angular/common'
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
@@ -20,8 +20,11 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 })
 export class UserDetailsComponent {
 
-  individualUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null)
-  individualUser$: Observable<User | null> = this.individualUserSubject.asObservable()// this should be the value whitch we put in async pipe in details template
+  individualUser$: Observable<User | null> = this.activatedRoute.params.pipe(
+    tap(user => this.individulaUserId = user['id']),
+    map(params => params['id'] as string),
+    switchMap(id => this.usersService.getIndividualUser(id))
+  )
 
   individulaUserId: string | null = null
 
@@ -34,19 +37,6 @@ export class UserDetailsComponent {
 
   constructor(private usersService: UsersService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
 
-  ngOnInit() {
-    this.activatedRoute.params.pipe(map((params) => params['id'] as string),
-      tap(data => {
-        this.individulaUserId = data
-      }),
-      switchMap((user) =>
-        this.usersService.getIndividualUser(user)
-      ),
-      take(1)
-    ).subscribe(user => {
-      this.individualUserSubject.next(user)
-    })
-  }
   editUserRole() {
     this.assigning = true
   }
