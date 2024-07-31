@@ -7,6 +7,7 @@ import { Observable, map, switchMap, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
 import { UsersService } from '../../service/users/users.service'
+import { TranslateModule } from '@ngx-translate/core'
 
 
 @Component({
@@ -16,7 +17,8 @@ import { UsersService } from '../../service/users/users.service'
     MaterialModule,
     CommonModule,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.scss'

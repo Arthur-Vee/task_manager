@@ -25,13 +25,17 @@ $text-color: #bb0707;
 form {
   display: flex;
   flex-direction: column;
-
 }
 
 .lable {
   display: flex;
   justify-content: center;
 }
-.loginError{
+
+.loginError {
   height: 16px;
+}
+
+mat-error {
+  width: 200px;
 }

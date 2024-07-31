@@ -1,37 +1,36 @@
 @if (!isServer){
-
 <mat-card class="login-card">
   <mat-card-header>
-    <mat-card-title>Sign in</mat-card-title>
+    <mat-card-title>{{"LOGIN.TITLE" | translate}}</mat-card-title>
   </mat-card-header>
   <br>
   <mat-card-content>
     <form *ngIf="loginForm" [formGroup]="loginForm" (ngSubmit)="signIn()">
       <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
+        <mat-label>{{"LOGIN.USERNAME" | translate}}</mat-label>
         <input matInput type="text" formControlName="username">
         <mat-error>
-          Username is required
+          {{"LOGIN.USERNAME" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
+        <mat-label>{{"LOGIN.PASSWORD" | translate}}</mat-label>
         <input matInput type="password" formControlName="password">
         <mat-error>
-          Password is required
+          {{"LOGIN.PASSWORD" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.
         </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Sign in</button>
+      <button mat-raised-button color="primary" type="submit">{{"LOGIN.TITLE" | translate}}</button>
       <br>
-      <mat-label class="lable">Don't have an account?</mat-label>
+      <mat-label class="lable">{{"LOGIN.QUESTION" | translate}}</mat-label>
       <button mat-raised-button color="primary" type="button" routerLink="/register"
-        routerLinkActive="active">Register</button>
+        routerLinkActive="active">{{"LOGIN.REGISTER_BUTTON" | translate}}</button>
     </form>
   </mat-card-content>
   <br>
   <div class="loginError">
     <mat-error *ngIf="loginForm?.errors?.['unauthorised']">
-      Username or password is invalid
+      {{"LOGIN.ERROR_INVALID_CREDENTIALS" | translate}}
     </mat-error>
   </div>
 </mat-card>

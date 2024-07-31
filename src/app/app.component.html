@@ -1,17 +1,32 @@
-<div class="navigation" *ngIf="isLoggedIn$ |async">
+@if (!isServer){
+<div *ngIf="(isLoggedIn$ | async) == null || (isLoggedIn$ | async) == undefined">
+    {{"HOME.LANGUAGES" | translate}}
+    <select #langSelect (change)="translate.use(langSelect.value)&&userPreferedLanguage(langSelect.value)">
+        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{
+            lang }}</option>
+    </select>
+</div>
+}
+<div class="navigation" *ngIf="isLoggedIn$ | async">
     <div class="userDetails" *ngIf="user$ | async as user">
         <div class="nav-buttons">
-            <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> Task list </button>
+            <button mat-button type="button" routerLink="/tasks-list" routerLinkActive="active"> {{"HOME.TASK_LIST" |
+                translate}} </button>
             <button *ngIf="user.roles.includes('ADMIN')" mat-button type="button" routerLink="/users"
-                routerLinkActive="active"> Users List</button>
+                routerLinkActive="active">{{"HOME.USERS_LIST" | translate}} </button>
             <button *ngIf="user.roles.includes('ADMIN')" mat-button type="button" routerLink="/create-task"
-                routerLinkActive="active"> Create task
+                routerLinkActive="active"> {{"HOME.CREATE_TASK" | translate}}
             </button>
 
         </div>
         <div class="navigation">
-            Welcome, {{user.firstName}} {{user.lastName}}
-            <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()"> Sign out
+            <select #langSelect (change)="translate.use(langSelect.value)&&userPreferedLanguage(langSelect.value)">
+                <option *ngFor="let lang of translate.getLangs()" [value]="lang"
+                    [selected]="lang === translate.currentLang">{{ lang }}</option>
+            </select>
+            {{"HOME.WELCOME" | translate}}, {{user.firstName}} {{user.lastName}}
+            <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()">
+                {{"HOME.SIGN_OUT" | translate}}
             </button>
         </div>
     </div>

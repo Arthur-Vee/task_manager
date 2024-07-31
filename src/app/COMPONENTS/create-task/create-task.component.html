@@ -1,39 +1,43 @@
 <section>
-    <h1>Create Task</h1>
+    <h1>{{"CREATE_TASK.TITLE" | translate}}</h1>
     <form *ngIf="createTaskForm" #createdTaskForm [formGroup]="createTaskForm" (ngSubmit)="createTask()">
 
         <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input id="title" matInput formControlName="title" placeholder="Task title" type="text" value="">
-           <mat-error>Title is required</mat-error>
+            <mat-label>{{"CREATE_TASK.TASK_TITLE" | translate}}</mat-label>
+            <input id="title" matInput formControlName="title" [placeholder]=" 'CREATE_TASK.TASK_TITLE' | translate "
+                type="text" value="">
+            <mat-error>{{"CREATE_TASK.TASK_TITLE" | translate}} {{"ERROR.IS_REQUIRED" | translate}}</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Description</mat-label>
-            <input matInput formControlName="description" placeholder="Task description" value="">
-            <mat-error>Description is requred</mat-error>
+            <mat-label>{{"CREATE_TASK.DESCRIPTION" | translate}}</mat-label>
+            <input matInput formControlName="description" [placeholder]=" 'CREATE_TASK.DESCRIPTION' | translate "
+                value="">
+            <mat-error>{{"CREATE_TASK.DESCRIPTION" | translate}} {{"ERROR.IS_REQUIRED" |
+                translate}}</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Type</mat-label>
-            <mat-select formControlName="type" placeholder="Task type">
-                <mat-option value="Personal">Personal</mat-option>
-                <mat-option value="Work">Work</mat-option>
+            <mat-label>{{"CREATE_TASK.TYPE" | translate}}</mat-label>
+            <mat-select formControlName="type" [placeholder]="'CREATE_TASK.TYPE' | translate">
+                <mat-option value="Personal">{{"CREATE_TASK.TYPE_OPTIONS_PERSONAL" | translate}}</mat-option>
+                <mat-option value="Work">{{"CREATE_TASK.TYPE_OPTIONS_WORK" | translate}}</mat-option>
             </mat-select>
-            <mat-error>Type is required</mat-error>
+            <mat-error>{{"CREATE_TASK.TYPE" | translate}} {{"ERROR.IS_REQUIRED" | translate}}</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Assigned To</mat-label>
-            <mat-select formControlName="assignedTo" placeholder="Asiggned to">
-                <mat-option value="UNASSIGNED"> Unassigned </mat-option>
-                <mat-option value={{user.id}} *ngFor="let user of users$ | async">{{user.firstName}} {{user.lastName}} - {{user.username}}</mat-option>
+            <mat-label>{{"CREATE_TASK.ASSIGNED_TO" | translate}}</mat-label>
+            <mat-select formControlName="assignedTo" [placeholder]="'CREATE_TASK.ASSIGNED_TO' | translate">
+                <mat-option value="UNASSIGNED"> {{"CREATE_TASK.UNASSIGNED" | translate}} </mat-option>
+                <mat-option value={{user.id}} *ngFor="let user of users$ | async">{{user.firstName}} {{user.lastName}} -
+                    {{user.username}}</mat-option>
             </mat-select>
         </mat-form-field>
-    
+
         <br>
 
-        <button mat-flat-button color="primary">Create Task</button>
+        <button mat-flat-button color="primary">{{"CREATE_TASK.TITLE" | translate}}</button>
 
     </form>
 </section>

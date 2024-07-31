@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { FormControl, FormGroup, Validators, FormBuilder,ReactiveFormsModule } from '@angular/forms'
+import { FormControl, FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { Task } from '../../models/task.model'
 import { MaterialModule } from '../../material.module'
 import { TasksService } from '../../service/tasks/tasks.service'
@@ -7,6 +7,7 @@ import { NgIf, NgFor, CommonModule } from '@angular/common'
 import { take } from 'rxjs'
 import { Router } from '@angular/router'
 import { UsersService } from '../../service/users/users.service'
+import { TranslateModule } from '@ngx-translate/core'
 
 
 
@@ -19,7 +20,8 @@ import { UsersService } from '../../service/users/users.service'
     MaterialModule,
     NgIf,
     NgFor,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   templateUrl: './create-task.component.html',
   styleUrl: './create-task.component.scss'
@@ -29,12 +31,12 @@ export class CreateTaskComponent {
   createTaskForm: FormGroup | null = null
   users$ = this.userService.getAllUsers()
 
-  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router, private userService:UsersService) {
+  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router, private userService: UsersService) {
     this.createTaskForm = this.fb.group({
       title: new FormControl("", Validators.required),
       description: new FormControl("", Validators.required),
       type: new FormControl("", Validators.required),
-      assignedTo: new FormControl ("UNASSIGNED")
+      assignedTo: new FormControl("UNASSIGNED")
     })
   }
 
@@ -47,6 +49,6 @@ export class CreateTaskComponent {
       console.log("Task creation failed.")
     }
   }
-  
+
 }
 
