@@ -22,6 +22,14 @@
         "TITLE": "Пользователи",
         "DETAILS_BUTTON": "Детали пользователя"
     },
+    "USER_DETAILS": {
+        "ROLE": "Роль",
+        "NONE": "Нет",
+        "ROLE_DEFAULT": "Пользователь (по умолчанию)",
+        "ROLE_MANAGER": "Менеджер",
+        "SAVE_BUTTON": "Сохранить изменения",
+        "EDIT_BUTTON": "Редактировать"
+    },
     "TASK": {
         "TITLE": "Задача",
         "DETAILS": "Детали задачи",

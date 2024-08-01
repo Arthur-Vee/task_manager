@@ -5,18 +5,19 @@
     <form class="form" *ngIf="userDetailsForm" [formGroup]="userDetailsForm"
         (ngSubmit)="updateUserRole(userDetailsForm.value)">
         <mat-form-field *ngIf="assigning" appearance="fill">
-            <mat-label>Role</mat-label>
+            <mat-label>{{"USER_DETAILS.ROLE" | translate}}</mat-label>
             <mat-select formControlName="assignedUserRole">
-                <mat-option>None</mat-option>
-                <mat-option value="defaultRole" disabled="true">User (default)</mat-option>
-                <mat-option value="MANAGER" [disabled]="!assigning">Manager</mat-option>
+                <mat-option>{{"USER_DETAILS.NONE" | translate}}</mat-option>
+                <mat-option value="defaultRole" disabled="true">{{"USER_DETAILS.ROLE_DEFAULT" | translate}}</mat-option>
+                <mat-option value="MANAGER" [disabled]="!assigning">{{"USER_DETAILS.ROLE_MANAGER" |
+                    translate}}</mat-option>
             </mat-select>
-            <mat-error>Role is required</mat-error>
         </mat-form-field>
         <mat-card-actions>
             <button *ngIf="!assigning" id="editButton" mat-flat-button color="primary" type="button"
-                (click)="editUserRole()">Edit</button>
-            <button *ngIf="assigning" id="saveButton" mat-flat-button class="success" type="submit">Save</button>
+                (click)="editUserRole()">{{"USER_DETAILS.EDIT_BUTTON" | translate}}</button>
+            <button *ngIf="assigning" id="saveButton" mat-flat-button class="success"
+                type="submit">{{"USER_DETAILS.SAVE_BUTTON" | translate}}</button>
         </mat-card-actions>
     </form>
 </mat-card>

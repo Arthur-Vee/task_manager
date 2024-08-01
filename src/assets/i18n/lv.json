@@ -22,6 +22,14 @@
         "TITLE": "Lietotāji",
         "DETAILS_BUTTON": "Lietotāja detaļas"
     },
+    "USER_DETAILS": {
+        "ROLE": "Loma",
+        "NONE": "Nav",
+        "ROLE_DEFAULT": "Lietotājs (noklusējuma)",
+        "ROLE_MANAGER": "Vadītājs",
+        "SAVE_BUTTON": "Saglabāt izmaiņas",
+        "EDIT_BUTTON": "Rediģēt"
+    },
     "TASK": {
         "TITLE": "Uzdevums",
         "DETAILS": "Uzdevuma detaļas",

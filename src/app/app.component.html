@@ -1,8 +1,9 @@
 @if (!isServer){
 <div *ngIf="(isLoggedIn$ | async) == null || (isLoggedIn$ | async) == undefined">
     {{"HOME.LANGUAGES" | translate}}
-    <select #langSelect (change)="translate.use(langSelect.value)&&userPreferedLanguage(langSelect.value)">
-        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{
+    <select #langSelect (change)="appService.userPreferedLanguage(langSelect.value)">
+        <option *ngFor="let lang of appService.translate.getLangs()" [value]="lang"
+            [selected]="lang === appService.translate.currentLang">{{
             lang }}</option>
     </select>
 </div>
@@ -20,9 +21,9 @@
 
         </div>
         <div class="navigation">
-            <select #langSelect (change)="translate.use(langSelect.value)&&userPreferedLanguage(langSelect.value)">
-                <option *ngFor="let lang of translate.getLangs()" [value]="lang"
-                    [selected]="lang === translate.currentLang">{{ lang }}</option>
+            <select #langSelect (change)="appService.userPreferedLanguage(langSelect.value)">
+                <option *ngFor="let lang of appService.translate.getLangs()" [value]="lang"
+                    [selected]="lang === appService.translate.currentLang">{{ lang }}</option>
             </select>
             {{"HOME.WELCOME" | translate}}, {{user.firstName}} {{user.lastName}}
             <button mat-button type="button" routerLink="/login" routerLinkActive="active" (click)="signOut()">

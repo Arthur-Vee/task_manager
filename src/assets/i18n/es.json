@@ -22,6 +22,14 @@
         "TITLE": "Usuarios",
         "DETAILS_BUTTON": "Detalles del usuario"
     },
+    "USER_DETAILS": {
+        "ROLE": "Rol",
+        "NONE": "Ninguno",
+        "ROLE_DEFAULT": "Usuario (predeterminado)",
+        "ROLE_MANAGER": "Gerente",
+        "SAVE_BUTTON": "Guardar cambios",
+        "EDIT_BUTTON": "Editar"
+    },
     "TASK": {
         "TITLE": "Tarea",
         "DETAILS": "Detalles de la tarea",
