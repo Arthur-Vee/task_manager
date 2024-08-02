@@ -3,6 +3,7 @@ import { UsersService } from '../../service/users/users.service'
 import { NgIf, NgFor, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-user-list',
@@ -11,7 +12,8 @@ import { Router } from '@angular/router'
     NgFor,
     NgIf,
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    TranslateModule
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'

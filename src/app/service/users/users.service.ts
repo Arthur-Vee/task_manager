@@ -61,7 +61,8 @@ export class UsersService {
   }
 
   signOutUser(): void {
-    localStorage.clear()
+    localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem("id")
     this.router.navigate(["/login"])
     this.isLoggedInSubject.next(null)
     this.userSubject.next(null)

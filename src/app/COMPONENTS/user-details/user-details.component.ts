@@ -6,6 +6,7 @@ import { map, Observable, switchMap, tap } from 'rxjs'
 import { User, UpdateUserRoles } from '../../models/user.model'
 import { CommonModule } from '@angular/common'
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-user-details',
@@ -13,7 +14,8 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
   imports: [
     MaterialModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'

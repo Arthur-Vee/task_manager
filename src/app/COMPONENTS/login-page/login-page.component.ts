@@ -5,6 +5,7 @@ import { CommonModule, isPlatformServer } from '@angular/common'
 import { UsersService } from '../../service/users/users.service'
 import { take } from 'rxjs'
 import { Router, RouterLink } from '@angular/router'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-login-page',
@@ -13,7 +14,8 @@ import { Router, RouterLink } from '@angular/router'
     MaterialModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    TranslateModule
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
@@ -25,8 +27,8 @@ export class LoginPageComponent {
   isServer: boolean | null = null
 
   constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, @Inject(PLATFORM_ID) platformId: Object) {
-    this.isServer = isPlatformServer(platformId)
 
+    this.isServer = isPlatformServer(platformId)
     this.loginForm = this.fb.group({
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
@@ -45,7 +47,5 @@ export class LoginPageComponent {
       }
     })
   }
-
-
 }
 

@@ -6,6 +6,7 @@ import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
 import { UsersService } from '../../service/users/users.service'
 import { filter } from 'rxjs'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-task',
@@ -15,6 +16,7 @@ import { filter } from 'rxjs'
     NgIf,
     CommonModule,
     MaterialModule,
+    TranslateModule
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
