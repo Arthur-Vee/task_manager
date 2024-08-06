@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { LoginForm, UpdateUserRoles, User, UserLogin, UserRegistration } from '../../models/user.model'
-import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs'
+import { BehaviorSubject, map, Observable, take, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Router } from '@angular/router'
@@ -39,21 +39,18 @@ export class UsersService {
     return this.http.post<User>(usersApiUrl + id, body)
   }
 
-  signInUser(data: LoginForm): Observable<User> {
+  signInUser(data: LoginForm): Observable<UserLogin> {
     return this.http.post<UserLogin>(loginApiUrl, data).pipe(tap(
       {
         next: data => {
           localStorage.setItem("id", data.id),
             localStorage.setItem("isLoggedIn", data.token)
           this.isLoggedInSubject.next(data.token)
+          this.userSubject.next(data.user)
         }
       }
-    ), switchMap(() => {
-      return this.getUser().pipe(
-        tap((data) => {
-          this.userSubject.next(data) // This can be improved
-        }))
-    }))
+    )
+    )
   }
 
   isUserSignedIn(): string {
@@ -76,25 +73,8 @@ export class UsersService {
     return this.http.post<User>(usersApiUrl + id, body)
   }
 
-  registerUser(userData: UserRegistration): void {
-    this.http.post<UserLogin>(usersApiUrl, userData).pipe(
-      tap(
-        {
-          next: data => {
-            localStorage.setItem("id", data.id),
-              localStorage.setItem("isLoggedIn", data.token)
-            this.router.navigate(["tasks-list"])
-          },
-          error: err => {
-            return err
-          }
-        }
-      ), switchMap(() => {
-        return this.getUser().pipe(
-          tap((data) => {
-            this.userSubject.next(data) // This can be improved
-          }))
-      })).subscribe()
+  registerUser(userData: UserRegistration): Observable<UserLogin> {
+    return this.http.post<UserLogin>(usersApiUrl, userData)
   }
 
   updateUserRole(updateUserRole: UpdateUserRoles): void {
