@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core'
-import { Task } from '../../models/task.model'
+// import { Task } from '../../models/task.model' OLD WAY
 import { MaterialModule } from '../../material.module'
-import { TasksService } from '../../service/tasks/tasks.service'
+// import { TasksService } from '../../service/tasks/tasks.service' OLD WAY
 import { ActivatedRoute } from '@angular/router'
-import { Observable, map, switchMap, take } from 'rxjs'
+import { filter, map, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
 import { UsersService } from '../../service/users/users.service'
 import { TranslateModule } from '@ngx-translate/core'
 
+import { Store } from '@ngrx/store'
+import AppState from '../../store/app.state'
+import * as taskActions from '../../store/task/task.actions'
+import * as taskSelectors from '../../store/task/task.selectors'
+import * as selectors from '../../store/user/user.selectors'
+import * as userActions from '../../store/user/user.actions'
 
 @Component({
   selector: 'app-task-details',
@@ -25,8 +31,8 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class TaskDetailsComponent implements OnInit {
 
-  task$: Observable<Task | null> = this.tasksService.task$
-  users$ = this.usersService.getAllUsers()
+  // task$: Observable<Task | null> = this.store.select(taskSelectors.selectTaskById) OLD WAY
+  users$ = this.store.select(selectors.selectAllUsers)
   taskId: string = ""
   editing: boolean = false
 
@@ -41,23 +47,40 @@ export class TaskDetailsComponent implements OnInit {
     assignedTo: new FormControl({ value: "", disabled: true })
   })
 
-  constructor(private tasksService: TasksService, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private usersService: UsersService) { }
+  constructor(
+    // private tasksService: TasksService, OLD WAY
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private store: Store<AppState>
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.params.pipe(map((params) => params['id'] as string),
-      switchMap((taskId) => this.tasksService.getTaskById(taskId)), take(1)
-    ).subscribe(task => {
-      this.tasksService.taskSubject.next(task)
-      this.taskId = task.id
-      this.taskForm.patchValue({
-        title: task.title,
-        description: task.description,
-        type: task.type,
-        status: task.status,
-        createdOn: task.createdOn,
-        assignedTo: task.assignedTo
-      })
-    })
+      take(1)
+    ).subscribe((taskId) => {
+      this.taskId = taskId
+      this.store.dispatch(taskActions.loadIndividualTask({ taskId }))
+      this.store.dispatch(userActions.loadUsers()) // loading users for template
+      this.store.select(taskSelectors.selectTaskById).pipe(
+        filter(task => !!task && task.id === taskId),
+        take(1)).
+        subscribe(task => {
+          if (task) {
+            this.taskForm.patchValue({
+              title: task.title,
+              description: task.description,
+              type: task.type,
+              status: task.status,
+              createdOn: task.createdOn,
+              assignedTo: task.assignedTo
+            })
+          }
+        })
+    }
+    )
+
+
     this.usersService.getUser().pipe(take(1)).subscribe(
       data => {
         return this.currentUserRoles = data?.roles
@@ -65,31 +88,31 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   updateTaskDetails(): void {
-    const updatedTaskDetails = this.taskForm.value
+    const updatedTaskFormDetails = this.taskForm.value
+    const updatedTaskDetails = {
+      id: this.taskId,
+      title: updatedTaskFormDetails.title,
+      description: updatedTaskFormDetails.description,
+      type: updatedTaskFormDetails.type,
+      status: updatedTaskFormDetails.status,
+      createdOn: updatedTaskFormDetails.createdOn,
+      assignedTo: updatedTaskFormDetails.assignedTo
+    }
+    this.store.dispatch(taskActions.updateTask({ updatedTaskDetails }))
 
-    this.tasksService.updateTask(updatedTaskDetails, this.taskId).pipe(
-      take(1)
-    ).subscribe({
-      next: task => {
-        this.tasksService.taskSubject.next(task)
-        this.editing = false
-        this.taskForm.get('title')?.disable()
-        this.taskForm.get('description')?.disable()
-        this.taskForm.get('status')?.disable()
-        this.taskForm.get('type')?.disable()
-        this.taskForm.get('assignedTo')?.disable()
-        this.taskForm.patchValue({
-          title: task.title,
-          description: task.description,
-          type: task.type,
-          status: task.status,
-          createdOn: task.createdOn,
-          assignedTo: task.assignedTo
-        })
-      },
-      error: err => {
-        this.allowTaskEdit()
-      },
+    this.editing = false
+    this.taskForm.get('title')?.disable()
+    this.taskForm.get('description')?.disable()
+    this.taskForm.get('status')?.disable()
+    this.taskForm.get('type')?.disable()
+    this.taskForm.get('assignedTo')?.disable()
+    this.taskForm.patchValue({
+      title: updatedTaskDetails.title,
+      description: updatedTaskDetails.description,
+      type: updatedTaskDetails.type,
+      status: updatedTaskDetails.status,
+      createdOn: updatedTaskDetails.createdOn,
+      assignedTo: updatedTaskDetails.assignedTo
     })
   }
 

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core'
 import { CanActivateFn, Router } from '@angular/router'
 import { UsersService } from '../users/users.service'
-import { of, take } from 'rxjs'
+import { of, take, tap } from 'rxjs'
 
 export const authGuard: CanActivateFn = async (route, state) => {
 
@@ -15,6 +15,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
         router.navigate(['/login'])
         return of(false)
       }
+
       if (requiredRoles) {
         let userHaveRequiredRole = requiredRoles.some((requiredRole: string) => currentUser?.roles.includes(requiredRole))
         if (!userHaveRequiredRole) {

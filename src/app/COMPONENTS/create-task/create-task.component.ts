@@ -10,6 +10,12 @@ import { UsersService } from '../../service/users/users.service'
 import { TranslateModule } from '@ngx-translate/core'
 
 
+import { Store } from '@ngrx/store'
+import AppState from '../../store/app.state'
+import * as taskActions from '../../store/task/task.actions'
+
+import * as userSelectors from '../../store/user/user.selectors'
+
 
 
 @Component({
@@ -29,9 +35,17 @@ import { TranslateModule } from '@ngx-translate/core'
 
 export class CreateTaskComponent {
   createTaskForm: FormGroup | null = null
-  users$ = this.userService.getAllUsers()
+  users$ = this.store.select(userSelectors.selectAllUsers)
 
-  constructor(private taskService: TasksService, private fb: FormBuilder, private router: Router, private userService: UsersService) {
+  constructor(
+    private taskService: TasksService, 
+    private fb: FormBuilder, 
+    private router: Router, 
+    private userService: UsersService,
+    private store: Store<AppState>
+  ) 
+
+  {
     this.createTaskForm = this.fb.group({
       title: new FormControl("", Validators.required),
       description: new FormControl("", Validators.required),
@@ -43,7 +57,8 @@ export class CreateTaskComponent {
   createTask() {
     if (this.createTaskForm?.valid) {
       const task: Task = this.createTaskForm.value
-      this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']) })
+      // this.taskService.createNewTask(task)?.pipe(take(1)).subscribe(() => { this.router.navigate(['/tasks-list']) })
+      this.store.dispatch(taskActions.createTask({ task }))
       this.createTaskForm.reset()
     } else {
       console.log("Task creation failed.")

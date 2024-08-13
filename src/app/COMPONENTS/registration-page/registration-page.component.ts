@@ -36,8 +36,8 @@ export class RegistrationPageComponent {
         tap(
           {
             next: data => {
-              localStorage.setItem("id", data.id),
-                localStorage.setItem("isLoggedIn", data.token)
+              localStorage.setItem("id", data.userId),
+                localStorage.setItem("isLoggedIn", data.isLoggedIn)
               this.usersService.userSubject.next(data.user)
               this.router.navigate(["tasks-list"])
             },

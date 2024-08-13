@@ -8,8 +8,8 @@ export type User = {
 }
 
 export type UserLogin = {
-    id: string
-    token: string
+    userId: string
+    isLoggedIn: string
     user: User
 }
 

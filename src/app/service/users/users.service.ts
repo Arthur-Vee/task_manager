@@ -21,16 +21,16 @@ export class UsersService {
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
     this.localStorage = document.defaultView?.localStorage
-
+    
     this.getUser().pipe(take(1)).subscribe(
       user => {
         this.userSubject.next(user)
       }
     )
   }
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(usersApiUrl)
-  }
+  // getAllUsers(): Observable<User[]> {
+  //   return this.http.get<User[]>(usersApiUrl)
+  // } OLD WAY
 
   getIndividualUser(id: string): Observable<User> {
     var body = {
@@ -39,19 +39,19 @@ export class UsersService {
     return this.http.post<User>(usersApiUrl + id, body)
   }
 
-  signInUser(data: LoginForm): Observable<UserLogin> {
-    return this.http.post<UserLogin>(loginApiUrl, data).pipe(tap(
-      {
-        next: data => {
-          localStorage.setItem("id", data.id),
-            localStorage.setItem("isLoggedIn", data.token)
-          this.isLoggedInSubject.next(data.token)
-          this.userSubject.next(data.user)
-        }
-      }
-    )
-    )
-  }
+  // signInUser(data: LoginForm): Observable<UserLogin> {
+  //   return this.http.post<UserLogin>(loginApiUrl, data).pipe(tap(
+  //     {
+  //       next: data => {
+  //         localStorage.setItem("id", data.id),
+  //           localStorage.setItem("isLoggedIn", data.token)
+  //         this.isLoggedInSubject.next(data.token)
+  //         this.userSubject.next(data.user)
+  //       }
+  //     }
+  //   )
+  //   )
+  // }  OLD WAY
 
   isUserSignedIn(): string {
     return this.localStorage?.getItem("isLoggedIn") as string

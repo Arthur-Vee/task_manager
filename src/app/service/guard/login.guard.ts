@@ -6,6 +6,7 @@ export const loginGuard: CanActivateFn = (route, state) => {
   const authService = inject(UsersService)
   const router = inject(Router)
 
+  console.log("Performing User Login before leting him in")
   if (authService.isUserSignedIn()) {
     router.navigate(['/tasks-list'])
   }

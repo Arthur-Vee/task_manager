@@ -11,6 +11,11 @@ import { User } from './models/user.model'
 import { TranslateModule } from '@ngx-translate/core'
 import { AppService } from './service/app/app.service'
 
+import { select, Store } from '@ngrx/store'
+import { selectCurrentUser } from './store/user/user.selectors'
+
+
+
 
 @Component({
   selector: 'app-root',
@@ -33,12 +38,20 @@ export class AppComponent {
   title = 'Task Manager'
 
   isLoggedIn$: Observable<String | null> = this.usersService.isLoggedIn$
-  user$: Observable<User | null> = this.usersService.user$
+  user$: Observable<User | null> | undefined
+
 
   isServer: boolean | null = null
 
-  constructor(public appService: AppService, private usersService: UsersService, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) platformId: Object) {
+  constructor(private store:Store ,public appService: AppService, private usersService: UsersService, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) platformId: Object) {
     this.isServer = isPlatformServer(platformId)
+  }
+  ngOnInit(): void {
+    this.user$ = this.store.pipe(select(selectCurrentUser))
+
+    this.user$.subscribe(user => {
+      console.log("Current User:", user)
+    }) // For testing
   }
   signOut(): void {
     this.usersService.signOutUser()
