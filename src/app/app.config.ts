@@ -6,11 +6,11 @@ import { provideClientHydration } from '@angular/platform-browser'
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http'
 
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { HttpLoaderFactory } from './translate-loader';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { HttpLoaderFactory } from './translate-loader'
 
-import { provideStore } from '@ngrx/store';
-import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store'
+import { provideEffects } from '@ngrx/effects'
 import { taskReducer } from './store/task/task.reducer'
 import { TaskEffects } from './store/task/task.effects'
 
@@ -38,7 +38,8 @@ export const appConfig: ApplicationConfig = {
         provideStore({
             tasks: taskReducer,
             users: userReducer,
-            currentUser: userReducer // Is this needed?
+            currentUser: userReducer,
+            isLoggedIn: userReducer
         }),
         provideEffects(
             TaskEffects,

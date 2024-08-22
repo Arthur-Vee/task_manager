@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core'
-// import { Task } from '../../models/task.model' OLD WAY
 import { MaterialModule } from '../../material.module'
-// import { TasksService } from '../../service/tasks/tasks.service' OLD WAY
 import { ActivatedRoute } from '@angular/router'
 import { filter, map, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
-import { UsersService } from '../../service/users/users.service'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { Store } from '@ngrx/store'
 import AppState from '../../store/app.state'
 import * as taskActions from '../../store/task/task.actions'
-import * as taskSelectors from '../../store/task/task.selectors'
-import * as selectors from '../../store/user/user.selectors'
 import * as userActions from '../../store/user/user.actions'
+import * as taskSelectors from '../../store/task/task.selectors'
+import * as userSelectors from '../../store/user/user.selectors'
 
 @Component({
   selector: 'app-task-details',
@@ -31,12 +28,10 @@ import * as userActions from '../../store/user/user.actions'
 })
 export class TaskDetailsComponent implements OnInit {
 
-  // task$: Observable<Task | null> = this.store.select(taskSelectors.selectTaskById) OLD WAY
-  users$ = this.store.select(selectors.selectAllUsers)
+  users$ = this.store.select(userSelectors.selectAllUsers)
+  currentUserRoles$ = this.store.select(userSelectors.selectCurrentUserRoles)
   taskId: string = ""
   editing: boolean = false
-
-  currentUserRoles: string[] | null = null
 
   taskForm: FormGroup = this.fb.group({
     title: new FormControl({ value: "", disabled: true }, Validators.required),
@@ -48,10 +43,8 @@ export class TaskDetailsComponent implements OnInit {
   })
 
   constructor(
-    // private tasksService: TasksService, OLD WAY
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private usersService: UsersService,
     private store: Store<AppState>
   ) { }
 
@@ -61,29 +54,24 @@ export class TaskDetailsComponent implements OnInit {
     ).subscribe((taskId) => {
       this.taskId = taskId
       this.store.dispatch(taskActions.loadIndividualTask({ taskId }))
-      this.store.dispatch(userActions.loadUsers()) // loading users for template
-      this.store.select(taskSelectors.selectTaskById).pipe(
-        filter(task => !!task && task.id === taskId),
-        take(1)).
-        subscribe(task => {
-          if (task) {
-            this.taskForm.patchValue({
-              title: task.title,
-              description: task.description,
-              type: task.type,
-              status: task.status,
-              createdOn: task.createdOn,
-              assignedTo: task.assignedTo
-            })
-          }
-        })
-    }
-    )
+      this.store.dispatch(userActions.loadUsers())
+      this.store.dispatch(userActions.getCurrentUser())
+    })
 
-
-    this.usersService.getUser().pipe(take(1)).subscribe(
-      data => {
-        return this.currentUserRoles = data?.roles
+    this.store.select(taskSelectors.selectTaskById).pipe(
+      filter(task => !!task && task.id === this.taskId),
+      take(1)).
+      subscribe(task => {
+        if (task) {
+          this.taskForm.patchValue({
+            title: task.title,
+            description: task.description,
+            type: task.type,
+            status: task.status,
+            createdOn: task.createdOn,
+            assignedTo: task.assignedTo
+          })
+        }
       })
   }
 
@@ -111,23 +99,25 @@ export class TaskDetailsComponent implements OnInit {
       description: updatedTaskDetails.description,
       type: updatedTaskDetails.type,
       status: updatedTaskDetails.status,
-      createdOn: updatedTaskDetails.createdOn,
       assignedTo: updatedTaskDetails.assignedTo
     })
   }
 
   allowTaskEdit(): void {
-    if (this.currentUserRoles?.includes('MANAGER')) {
-      this.taskForm.get('assignedTo')?.enable()
-      this.editing = true
+    this.store.select(userSelectors.selectCurrentUserRoles).pipe(take(1)).subscribe((roles) => {
+      if (roles?.includes('MANAGER')) {
+        this.taskForm.get('assignedTo')?.enable()
+        this.editing = true
+      }
+      if (roles?.includes('ADMIN')) {
+        this.editing = true
+        this.taskForm.get('title')?.enable()
+        this.taskForm.get('description')?.enable()
+        this.taskForm.get('status')?.enable()
+        this.taskForm.get('type')?.enable()
+        this.taskForm.get('assignedTo')?.enable()
+      }
     }
-    if (this.currentUserRoles?.includes('ADMIN')) {
-      this.editing = true
-      this.taskForm.get('title')?.enable()
-      this.taskForm.get('description')?.enable()
-      this.taskForm.get('status')?.enable()
-      this.taskForm.get('type')?.enable()
-      this.taskForm.get('assignedTo')?.enable()
-    }
+    )
   }
 }

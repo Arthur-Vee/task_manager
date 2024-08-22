@@ -1,4 +1,3 @@
-
 export type User = {
     id: string
     username: string
@@ -8,8 +7,8 @@ export type User = {
 }
 
 export type UserLogin = {
-    userId: string
-    isLoggedIn: string
+    id: string
+    token: string
     user: User
 }
 

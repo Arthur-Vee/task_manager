@@ -5,14 +5,14 @@ import { TaskComponent } from './components/task/task.component'
 import { MaterialModule } from './material.module'
 import { CommonModule, DOCUMENT, isPlatformServer } from '@angular/common'
 import { LoginPageComponent } from './components/login-page/login-page.component'
-import { UsersService } from './service/users/users.service'
 import { Observable } from 'rxjs'
 import { User } from './models/user.model'
 import { TranslateModule } from '@ngx-translate/core'
 import { AppService } from './service/app/app.service'
 
-import { select, Store } from '@ngrx/store'
-import { selectCurrentUser } from './store/user/user.selectors'
+import { Store } from '@ngrx/store'
+import { selectCurrentUser, selectIsLoggedIn } from './store/user/user.selectors'
+import * as userActions from './store/user/user.actions'
 
 
 
@@ -35,25 +35,22 @@ import { selectCurrentUser } from './store/user/user.selectors'
 })
 
 export class AppComponent {
+
   title = 'Task Manager'
-
-  isLoggedIn$: Observable<String | null> = this.usersService.isLoggedIn$
-  user$: Observable<User | null> | undefined
-
-
+  isLoggedIn$: Observable<string | null> = this.store.select(selectIsLoggedIn)
+  user$: Observable<User | null> | undefined = this.store.select(selectCurrentUser)
   isServer: boolean | null = null
+  localStorage: Storage | undefined
 
-  constructor(private store:Store ,public appService: AppService, private usersService: UsersService, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) platformId: Object) {
+
+  constructor(private store: Store, public appService: AppService, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) platformId: Object) {
     this.isServer = isPlatformServer(platformId)
+    this.localStorage = document.defaultView?.localStorage
   }
   ngOnInit(): void {
-    this.user$ = this.store.pipe(select(selectCurrentUser))
-
-    this.user$.subscribe(user => {
-      console.log("Current User:", user)
-    }) // For testing
+    this.store.dispatch(userActions.getCurrentUser())
   }
   signOut(): void {
-    this.usersService.signOutUser()
+    this.store.dispatch(userActions.signOutUser())
   }
 }

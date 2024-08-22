@@ -54,9 +54,9 @@
 
         <br>
 
-        <mat-card-actions *ngIf="currentUserRoles?.includes('MANAGER'||'ADMIN')">
-            <button *ngIf="!editing" id="editButton" mat-flat-button color="primary" type="button"
-                (click)="allowTaskEdit()">{{"TASK.EDIT_BUTTON" | translate}}</button>
+        <mat-card-actions *ngIf="currentUserRoles$ | async as roles">
+            <button *ngIf="roles.includes('MANAGER'||'ADMIN') &&!editing" id="editButton" mat-flat-button
+                color="primary" type="button" (click)="allowTaskEdit()">{{"TASK.EDIT_BUTTON" | translate}}</button>
             <button *ngIf="editing" id="saveButton" mat-flat-button class="success" type="submit">{{"TASK.SAVE_BUTTON" |
                 translate}}</button>
         </mat-card-actions>

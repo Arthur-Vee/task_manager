@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core'
-import { UsersService } from '../../service/users/users.service'
 import { NgIf, NgFor, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
 import { Router } from '@angular/router'
@@ -26,10 +25,10 @@ export class UserListComponent {
   allUsers$ = this.store.select(selectors.selectAllUsers)
   readonly panelOpenState = signal(false)
 
-  constructor(private usersService: UsersService, private router: Router, private store:Store) { }
-ngOnInit() {
-  this.store.dispatch(userActions.loadUsers())
-}
+  constructor(private router: Router, private store: Store) { }
+  ngOnInit() {
+    this.store.dispatch(userActions.loadUsers())
+  }
   redirectToUserDetails(userId: string) {
     this.router.navigate(['users/' + userId])
   }

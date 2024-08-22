@@ -1,5 +1,5 @@
 @if (!isServer){
-<div *ngIf="(isLoggedIn$ | async) == null || (isLoggedIn$ | async) == undefined">
+<div *ngIf="(isLoggedIn$| async) == null">
     {{"HOME.LANGUAGES" | translate}}
     <select #langSelect (change)="appService.userPreferedLanguage(langSelect.value)">
         <option *ngFor="let lang of appService.translate.getLangs()" [value]="lang"

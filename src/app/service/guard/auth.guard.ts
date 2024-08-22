@@ -1,7 +1,7 @@
 import { inject } from '@angular/core'
 import { CanActivateFn, Router } from '@angular/router'
 import { UsersService } from '../users/users.service'
-import { of, take, tap } from 'rxjs'
+import { of, take } from 'rxjs'
 
 export const authGuard: CanActivateFn = async (route, state) => {
 
@@ -25,6 +25,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
       }
       return
     })
-  authService.isLoggedInSubject.next(authService.isUserSignedIn() as string)
+
   return true
 }
