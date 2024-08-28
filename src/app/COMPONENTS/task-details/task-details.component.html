@@ -1,65 +1,105 @@
-<mat-card class="task-card" appearance="outlined">
-    <mat-card-header>
-        <mat-card-title>{{"TASK.DETAILS" | translate}}</mat-card-title>
-    </mat-card-header>
-    <br>
-    <form class="form" *ngIf="taskForm" [formGroup]="taskForm" (ngSubmit)="updateTaskDetails()">
-        <mat-card-content class="mat-card-content ">
+<mat-card class="task-card" appearance="outlined" *ngIf="currentUserRoles$ | async as roles"  >
+  <mat-card-header>
+    <mat-card-title>{{ "TASK.DETAILS" | translate }}</mat-card-title>
+  </mat-card-header>
+  <br />
+  <form
+    class="form"
+    *ngIf="taskForm"
+    [formGroup]="taskForm"
+    (ngSubmit)="updateTaskDetails()"
+  >
+    <mat-card-content class="mat-card-content">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ "TASK.TITLE" | translate }} </mat-label>
+        <input matInput formControlName="title" required />
+        <mat-error
+          >{{ "TASK.TITLE" | translate }}
+          {{ "ERROR.IS_REQUIRED" | translate }}.</mat-error
+        >
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.TITLE" | translate}} </mat-label>
-                <input matInput formControlName="title" required>
-                <mat-error>{{"TASK.TITLE" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.</mat-error>
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ "TASK.DESCRIPTION" | translate }} </mat-label>
+        <input matInput formControlName="description" required />
+        <mat-error
+          >{{ "TASK.DESCRIPTION" | translate }}
+          {{ "ERROR.IS_REQUIRED" | translate }}.</mat-error
+        >
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.DESCRIPTION" | translate}} </mat-label>
-                <input matInput formControlName="description" required>
-                <mat-error>{{"TASK.DESCRIPTION" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.</mat-error>
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ "TASK.TYPE" | translate }}</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="Personal">{{
+            "TASK.TYPE_OPTIONS_PERSONAL" | translate
+          }}</mat-option>
+          <mat-option value="Work">{{
+            "TASK.TYPE_OPTIONS_WORK" | translate
+          }}</mat-option>
+        </mat-select>
+        <mat-error
+          >{{ "TASK.TYPE" | translate }}
+          {{ "ERROR.IS_REQUIRED" | translate }}.</mat-error
+        >
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.TYPE" | translate}}</mat-label>
-                <mat-select formControlName="type">
-                    <mat-option value="Personal">{{"TASK.TYPE_OPTIONS_PERSONAL" | translate}}</mat-option>
-                    <mat-option value="Work">{{"TASK.TYPE_OPTIONS_WORK" | translate}}</mat-option>
-                </mat-select>
-                <mat-error>{{"TASK.TYPE" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.</mat-error>
-            </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="roles.includes('MANAGER' || 'ADMIN')">
+        <mat-label>{{ "TASK.ASSIGNED_TO" | translate }}</mat-label>
+        <mat-select formControlName="assignedTo">
+          <mat-option value="{{ user.id }}" *ngFor="let user of users$ | async">
+            {{ user.firstName }} {{ user.lastName }} - {{ user.username }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.ASSIGNED_TO" | translate}}</mat-label>
-                <mat-select formControlName="assignedTo">
-                    <mat-option value={{user.id}} *ngFor="let user of users$ | async">
-                        {{user.firstName}} {{user.lastName}} - {{user.username}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ "TASK.STATUS" | translate }}</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="Active">{{
+            "TASK.STATUS_ACTIVE" | translate
+          }}</mat-option>
+          <mat-option value="Awaiting">{{
+            "TASK.STATUS_AWAITING" | translate
+          }}</mat-option>
+          <mat-option value="Done">{{
+            "TASK.STATUS_DONE" | translate
+          }}</mat-option>
+        </mat-select>
+        <mat-error
+          >{{ "TASK.STATUS" | translate }}
+          {{ "ERROR.IS_REQUIRED" | translate }}.</mat-error
+        >
+      </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.STATUS" | translate}}</mat-label>
-                <mat-select formControlName="status">
-                    <mat-option value="Active">{{"TASK.STATUS_ACTIVE" | translate}}</mat-option>
-                    <mat-option value="Awaiting">{{"TASK.STATUS_AWAITING" | translate}}</mat-option>
-                    <mat-option value="Done">{{"TASK.STATUS_DONE" | translate}}</mat-option>
-                </mat-select>
-                <mat-error>{{"TASK.STATUS" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.</mat-error>
-            </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ "TASK.CREATED_ON" | translate }}</mat-label>
+        <input matInput formControlName="createdOn" />
+      </mat-form-field>
+    </mat-card-content>
 
-            <mat-form-field appearance="fill">
-                <mat-label>{{"TASK.CREATED_ON" | translate}}</mat-label>
-                <input matInput formControlName="createdOn">
-            </mat-form-field>
-        </mat-card-content>
+    <br />
 
-        <br>
-
-        <mat-card-actions *ngIf="currentUserRoles$ | async as roles">
-            <button *ngIf="roles.includes('MANAGER'||'ADMIN') &&!editing" id="editButton" mat-flat-button
-                color="primary" type="button" (click)="allowTaskEdit()">{{"TASK.EDIT_BUTTON" | translate}}</button>
-            <button *ngIf="editing" id="saveButton" mat-flat-button class="success" type="submit">{{"TASK.SAVE_BUTTON" |
-                translate}}</button>
-        </mat-card-actions>
-
-    </form>
+    <mat-card-actions>
+      <button
+        *ngIf="roles.includes('MANAGER' || 'ADMIN') && !editing"
+        id="editButton"
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="allowTaskEdit(roles)"
+      >
+        {{ "TASK.EDIT_BUTTON" | translate }}
+      </button>
+      <button
+        *ngIf="editing"
+        id="saveButton"
+        mat-flat-button
+        class="success"
+        type="submit"
+      >
+        {{ "TASK.SAVE_BUTTON" | translate }}
+      </button>
+    </mat-card-actions>
+  </form>
 </mat-card>

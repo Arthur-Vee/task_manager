@@ -3,7 +3,13 @@ import { MaterialModule } from '../../material.module'
 import { ActivatedRoute } from '@angular/router'
 import { filter, map, take } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
-import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms'
+import {
+  FormBuilder,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+  FormGroup,
+} from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { Store } from '@ngrx/store'
@@ -21,47 +27,58 @@ import * as userSelectors from '../../store/user/user.selectors'
     CommonModule,
     NgIf,
     ReactiveFormsModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './task-details.component.html',
-  styleUrl: './task-details.component.scss'
+  styleUrl: './task-details.component.scss',
 })
 export class TaskDetailsComponent implements OnInit {
-
   users$ = this.store.select(userSelectors.selectAllUsers)
   currentUserRoles$ = this.store.select(userSelectors.selectCurrentUserRoles)
-  taskId: string = ""
+  taskId: string = ''
   editing: boolean = false
 
   taskForm: FormGroup = this.fb.group({
-    title: new FormControl({ value: "", disabled: true }, Validators.required),
-    description: new FormControl({ value: "", disabled: true }, Validators.required),
-    type: new FormControl({ value: "", disabled: true }, Validators.required),
-    status: new FormControl({ value: "", disabled: true }, Validators.required),
-    createdOn: new FormControl({ value: "", disabled: true }, Validators.required),
-    assignedTo: new FormControl({ value: "", disabled: true })
+    title: new FormControl({ value: '', disabled: true }, Validators.required),
+    description: new FormControl(
+      { value: '', disabled: true },
+      Validators.required
+    ),
+    type: new FormControl({ value: '', disabled: true }, Validators.required),
+    status: new FormControl({ value: '', disabled: true }, Validators.required),
+    createdOn: new FormControl(
+      { value: '', disabled: true },
+      Validators.required
+    ),
+    assignedTo: new FormControl({ value: '', disabled: true }),
   })
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private store: Store<AppState>
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.pipe(map((params) => params['id'] as string),
-      take(1)
-    ).subscribe((taskId) => {
-      this.taskId = taskId
-      this.store.dispatch(taskActions.loadIndividualTask({ taskId }))
-      this.store.dispatch(userActions.loadUsers())
-      this.store.dispatch(userActions.getCurrentUser())
-    })
+    this.activatedRoute.params
+      .pipe(
+        map((params) => params['id'] as string),
+        take(1)
+      )
+      .subscribe((taskId) => {
+        this.taskId = taskId
+        this.store.dispatch(taskActions.loadIndividualTask({ taskId }))
+        this.store.dispatch(userActions.loadUsers())
+        this.store.dispatch(userActions.getCurrentUser())
+      })
 
-    this.store.select(taskSelectors.selectTaskById).pipe(
-      filter(task => !!task && task.id === this.taskId),
-      take(1)).
-      subscribe(task => {
+    this.store
+      .select(taskSelectors.selectTaskById)
+      .pipe(
+        filter((task) => !!task && task.id === this.taskId),
+        take(1)
+      )
+      .subscribe((task) => {
         if (task) {
           this.taskForm.patchValue({
             title: task.title,
@@ -69,10 +86,11 @@ export class TaskDetailsComponent implements OnInit {
             type: task.type,
             status: task.status,
             createdOn: task.createdOn,
-            assignedTo: task.assignedTo
+            assignedTo: task.assignedTo,
           })
         }
       })
+    console.log('onINIT: ', this.taskForm.value)
   }
 
   updateTaskDetails(): void {
@@ -84,7 +102,7 @@ export class TaskDetailsComponent implements OnInit {
       type: updatedTaskFormDetails.type,
       status: updatedTaskFormDetails.status,
       createdOn: updatedTaskFormDetails.createdOn,
-      assignedTo: updatedTaskFormDetails.assignedTo
+      assignedTo: updatedTaskFormDetails.assignedTo,
     }
     this.store.dispatch(taskActions.updateTask({ updatedTaskDetails }))
 
@@ -99,25 +117,22 @@ export class TaskDetailsComponent implements OnInit {
       description: updatedTaskDetails.description,
       type: updatedTaskDetails.type,
       status: updatedTaskDetails.status,
-      assignedTo: updatedTaskDetails.assignedTo
+      assignedTo: updatedTaskDetails.assignedTo,
     })
   }
 
-  allowTaskEdit(): void {
-    this.store.select(userSelectors.selectCurrentUserRoles).pipe(take(1)).subscribe((roles) => {
-      if (roles?.includes('MANAGER')) {
-        this.taskForm.get('assignedTo')?.enable()
-        this.editing = true
-      }
-      if (roles?.includes('ADMIN')) {
-        this.editing = true
-        this.taskForm.get('title')?.enable()
-        this.taskForm.get('description')?.enable()
-        this.taskForm.get('status')?.enable()
-        this.taskForm.get('type')?.enable()
-        this.taskForm.get('assignedTo')?.enable()
-      }
+  allowTaskEdit(roles: string[]): void {
+    if (roles?.includes('MANAGER')) {
+      this.taskForm.get('assignedTo')?.enable()
+      this.editing = true
     }
-    )
+    if (roles?.includes('ADMIN')) {
+      this.editing = true
+      this.taskForm.get('title')?.enable()
+      this.taskForm.get('description')?.enable()
+      this.taskForm.get('status')?.enable()
+      this.taskForm.get('type')?.enable()
+      this.taskForm.get('assignedTo')?.enable()
+    }
   }
 }

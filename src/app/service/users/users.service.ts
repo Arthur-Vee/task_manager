@@ -1,6 +1,12 @@
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
-import { LoginForm, UpdateUserRoles, User, UserLogin, UserRegistration } from '../../models/user.model'
+import {
+  LoginForm,
+  UpdateUserRoles,
+  User,
+  UserLogin,
+  UserRegistration,
+} from '../../models/user.model'
 import { map, Observable, tap } from 'rxjs'
 import { loginApiUrl, usersApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
@@ -8,13 +14,16 @@ import { Store } from '@ngrx/store'
 import { selectCurrentUser } from '../../store/user/user.selectors'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
-
   localStorage: Storage | undefined
 
-  constructor(private store: Store, private http: HttpClient, @Inject(DOCUMENT) private document: Document) {
+  constructor(
+    private store: Store,
+    private http: HttpClient,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     this.localStorage = document.defaultView?.localStorage
   }
   getAllUsers(): Observable<User[]> {
@@ -23,31 +32,30 @@ export class UsersService {
 
   getIndividualUser(id: string): Observable<User> {
     var body = {
-      token: this.localStorage?.getItem("token")
+      token: this.localStorage?.getItem('token'),
     }
     return this.http.post<User>(usersApiUrl + id, body)
   }
 
   signInUser(data: LoginForm): Observable<UserLogin> {
-    return this.http.post<UserLogin>(loginApiUrl, data).pipe(tap(
-      {
-        next: data => {
-          localStorage.setItem("id", data.id),
-            localStorage.setItem("isLoggedIn", data.token)
-        }
-      }
-    )
+    return this.http.post<UserLogin>(loginApiUrl, data).pipe(
+      tap({
+        next: (data) => {
+          localStorage.setItem('id', data.id),
+            localStorage.setItem('isLoggedIn', data.token)
+        },
+      })
     )
   }
 
   isUserSignedIn(): string {
-    return this.localStorage?.getItem("isLoggedIn") as string
+    return this.localStorage?.getItem('isLoggedIn') as string
   }
 
   getUser(): Observable<User> {
-    var id = this.localStorage?.getItem("id")
+    var id = this.localStorage?.getItem('id')
     var body = {
-      token: this.localStorage?.getItem("isLoggedIn")
+      token: this.localStorage?.getItem('isLoggedIn'),
     }
     return this.http.post<User>(usersApiUrl + id, body)
   }
@@ -58,16 +66,16 @@ export class UsersService {
 
   updateUserRole(updateUserRole: UpdateUserRoles): void {
     var body = {
-      adminToken: this.localStorage?.getItem("id"),
-      updatedUserData: updateUserRole
+      adminToken: this.localStorage?.getItem('id'),
+      updatedUserData: updateUserRole,
     }
     this.http.patch<UpdateUserRoles>(usersApiUrl, body).subscribe()
   }
 
-  getUserRoles(): Observable<string[] | null> {
+  getUserRoles(): Observable<string[]> {
     return this.store.select(selectCurrentUser).pipe(
-      map(data => {
-        return data?.roles as string[] | null;
+      map((data) => {
+        return data?.roles as string[]
       })
     )
   }

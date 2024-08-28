@@ -1,29 +1,30 @@
-import { Task } from "../models/task.model"
-import { User } from "../models/user.model"
+import { Task } from '../models/task.model'
+import { User } from '../models/user.model'
 
 export default interface AppState {
-    tasks: Task[],
-    currentUser: User | null,
-    users: User[],
-    userId: string | null,
-    error: Error | null,
-    
+  tasks: Task[],
+  currentUser: User | null,
+  isLoggedIn: string | null,
+  users: User[],
+  userId: string | null,
+  error: Error | null
 }
 export interface UsersState {
-    users: User[],
-    currentUser: User | null,
-    isLoggedIn: string | null,
-    error: Error | null
+  users: User[],
+  currentUser: User | null,
+  isLoggedIn: string | null,
+  error: Error | null
 }
 export interface TaskState {
-    tasks: Task[];
-    task: Task | null
-    error: Error | null
+  tasks: Task[],
+  task: Task | null,
+  error: Error | null
 }
 export const initialState: AppState = {
-    tasks: [],
-    currentUser: null,
-    users: [],
-    userId: null,
-    error: null,
+  tasks: [],
+  currentUser: null,
+  isLoggedIn: null,
+  users: [],
+  userId: null,
+  error: null
 }

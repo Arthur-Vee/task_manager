@@ -11,11 +11,12 @@ import { TranslateModule } from '@ngx-translate/core'
 import { AppService } from './service/app/app.service'
 
 import { Store } from '@ngrx/store'
-import { selectCurrentUser, selectIsLoggedIn } from './store/user/user.selectors'
+import {
+  selectCurrentUser,
+  selectIsLoggedIn,
+} from './store/user/user.selectors'
 import * as userActions from './store/user/user.actions'
-
-
-
+import { TaskSignalStore } from './service/tasks/tasks-signal-store/tasks-signal-store.service'
 
 @Component({
   selector: 'app-root',
@@ -28,27 +29,33 @@ import * as userActions from './store/user/user.actions'
     MaterialModule,
     CommonModule,
     LoginPageComponent,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
-
 export class AppComponent {
-
   title = 'Task Manager'
   isLoggedIn$: Observable<string | null> = this.store.select(selectIsLoggedIn)
-  user$: Observable<User | null> | undefined = this.store.select(selectCurrentUser)
+  user$: Observable<User | null>
   isServer: boolean | null = null
   localStorage: Storage | undefined
 
-
-  constructor(private store: Store, public appService: AppService, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) platformId: Object) {
+  constructor(
+    private store: Store,
+    public appService: AppService,
+    private tasksSignalStore: TaskSignalStore,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
     this.isServer = isPlatformServer(platformId)
     this.localStorage = document.defaultView?.localStorage
+
+    this.user$ = this.store.select(selectCurrentUser)
   }
   ngOnInit(): void {
     this.store.dispatch(userActions.getCurrentUser())
+    this.tasksSignalStore.loadAllTasks()
   }
   signOut(): void {
     this.store.dispatch(userActions.signOutUser())

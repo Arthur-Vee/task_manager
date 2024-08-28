@@ -1,31 +1,53 @@
 <ul>
-    <li *ngFor="let task of availableTasks$ | async">
-        <mat-card class="task-card" appearance="outlined" *ngIf="currentUser$ | async as currentUser">
-            <mat-card-header>
-                <mat-card-title class="task-title" (click)="sendToTaskDetails(task)">{{"TASK.TITLE" | translate}}:
-                    {{task.title}}</mat-card-title>
-            </mat-card-header>
-            <br>
-            <mat-card-content>
-                <span>{{"TASK.DESCRIPTION" | translate}}: </span><b>{{task.description}}</b>
-            </mat-card-content>
-            <br>
-            <mat-card-content>
-                <ng-container *ngIf="task.type">
-                    <p>{{ "TASK.TYPE" | translate }}: {{ ('TASK.TYPE_OPTIONS_' + task.type.toUpperCase()) | translate }}
-                    </p>
-                </ng-container>
-                <ng-container *ngIf="task.type">
-                    <p>{{ "TASK.STATUS" | translate }}: {{ ('TASK.STATUS_' + task.status.toUpperCase()) | translate }}
-                    </p>
-                </ng-container>
-                <p>{{"TASK.CREATED_ON" | translate}}: {{task.createdOn}}</p>
-                <button *ngIf="currentUser.roles.includes('ADMIN')" id="deleteButton" mat-flat-button
-                    (click)="deleteTask(task.id)">{{"TASK.DELETE_BUTTON" | translate}}</button>
-                <button id="detailsButton" mat-flat-button router
-                    (click)="sendToTaskDetails(task)">{{"TASK.DETAILS_BUTTON" | translate}}</button>
-            </mat-card-content>
-        </mat-card>
-        <br>
-    </li>
+  <li *ngFor="let task of tasksSignalStore.tasksSignal()">
+    <mat-card
+      class="task-card"
+      appearance="outlined"
+      *ngIf="currentUser$ | async as currentUser"
+    >
+      <mat-card-header>
+        <mat-card-title class="task-title" (click)="sendToTaskDetails(task)"
+          >{{ "TASK.TITLE" | translate }}: {{ task.title }}</mat-card-title
+        >
+      </mat-card-header>
+      <br />
+      <mat-card-content>
+        <span>{{ "TASK.DESCRIPTION" | translate }}: </span
+        ><b>{{ task.description }}</b>
+      </mat-card-content>
+      <br />
+      <mat-card-content>
+        <ng-container *ngIf="task.type">
+          <p>
+            {{ "TASK.TYPE" | translate }}:
+            {{ "TASK.TYPE_OPTIONS_" + task.type.toUpperCase() | translate }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="task.type">
+          <p>
+            {{ "TASK.STATUS" | translate }}:
+            {{ "TASK.STATUS_" + task.status.toUpperCase() | translate }}
+          </p>
+        </ng-container>
+        <p>{{ "TASK.CREATED_ON" | translate }}: {{ task.createdOn }}</p>
+        <button
+          *ngIf="currentUser.roles.includes('ADMIN')"
+          id="deleteButton"
+          mat-flat-button
+          (click)="deleteTask(task.id)"
+        >
+          {{ "TASK.DELETE_BUTTON" | translate }}
+        </button>
+        <button
+          id="detailsButton"
+          mat-flat-button
+          router
+          (click)="sendToTaskDetails(task)"
+        >
+          {{ "TASK.DETAILS_BUTTON" | translate }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+    <br />
+  </li>
 </ul>
