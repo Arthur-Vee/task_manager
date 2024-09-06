@@ -1,4 +1,8 @@
-<mat-card class="task-card" appearance="outlined" *ngIf="currentUserRoles$ | async as roles"  >
+<mat-card
+  class="task-card"
+  appearance="outlined"
+  *ngIf="currentUserRoles$ | async as roles"
+>
   <mat-card-header>
     <mat-card-title>{{ "TASK.DETAILS" | translate }}</mat-card-title>
   </mat-card-header>
@@ -44,7 +48,10 @@
         >
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="roles.includes('MANAGER' || 'ADMIN')">
+      <mat-form-field
+        appearance="fill"
+        *ngIf="roles.includes('MANAGER' || 'ADMIN')"
+      >
         <mat-label>{{ "TASK.ASSIGNED_TO" | translate }}</mat-label>
         <mat-select formControlName="assignedTo">
           <mat-option value="{{ user.id }}" *ngFor="let user of users$ | async">

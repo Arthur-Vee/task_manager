@@ -16,7 +16,7 @@ import {
   selectIsLoggedIn,
 } from './store/user/user.selectors'
 import * as userActions from './store/user/user.actions'
-import { TaskSignalStore } from './service/tasks/tasks-signal-store/tasks-signal-store.service'
+import { TaskSignal } from './service/tasks/tasks-signal/tasks-signal.service'
 
 @Component({
   selector: 'app-root',
@@ -44,7 +44,7 @@ export class AppComponent {
   constructor(
     private store: Store,
     public appService: AppService,
-    private tasksSignalStore: TaskSignalStore,
+    private tasksSignal: TaskSignal,
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
@@ -55,7 +55,7 @@ export class AppComponent {
   }
   ngOnInit(): void {
     this.store.dispatch(userActions.getCurrentUser())
-    this.tasksSignalStore.loadAllTasks()
+    this.tasksSignal.loadAllTasks()
   }
   signOut(): void {
     this.store.dispatch(userActions.signOutUser())

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, computed, OnInit } from '@angular/core'
 import { MaterialModule } from '../../material.module'
 import { ActivatedRoute } from '@angular/router'
-import { filter, map, take } from 'rxjs'
+import { map, take, tap } from 'rxjs'
 import { CommonModule, NgIf } from '@angular/common'
 import {
   FormBuilder,
@@ -16,8 +16,8 @@ import { Store } from '@ngrx/store'
 import AppState from '../../store/app.state'
 import * as taskActions from '../../store/task/task.actions'
 import * as userActions from '../../store/user/user.actions'
-import * as taskSelectors from '../../store/task/task.selectors'
 import * as userSelectors from '../../store/user/user.selectors'
+import { TaskSignal } from '../../service/tasks/tasks-signal/tasks-signal.service'
 
 @Component({
   selector: 'app-task-details',
@@ -35,11 +35,15 @@ import * as userSelectors from '../../store/user/user.selectors'
 export class TaskDetailsComponent implements OnInit {
   users$ = this.store.select(userSelectors.selectAllUsers)
   currentUserRoles$ = this.store.select(userSelectors.selectCurrentUserRoles)
+  selectedTask$ = computed(() => this.tasksSignal.selectedTaskSignal())
   taskId: string = ''
   editing: boolean = false
 
   taskForm: FormGroup = this.fb.group({
-    title: new FormControl({ value: '', disabled: true }, Validators.required),
+    title: new FormControl(
+      { value: this.selectedTask$()?.title, disabled: true },
+      Validators.required
+    ),
     description: new FormControl(
       { value: '', disabled: true },
       Validators.required
@@ -56,41 +60,35 @@ export class TaskDetailsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private tasksSignal: TaskSignal
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params
       .pipe(
         map((params) => params['id'] as string),
-        take(1)
+        take(1),
+        tap((taskId) => {
+          this.taskId = taskId
+          this.store.dispatch(userActions.loadUsers())
+          this.store.dispatch(userActions.getCurrentUser())
+          this.tasksSignal.loadTaskById(taskId)
+        })
       )
-      .subscribe((taskId) => {
-        this.taskId = taskId
-        this.store.dispatch(taskActions.loadIndividualTask({ taskId }))
-        this.store.dispatch(userActions.loadUsers())
-        this.store.dispatch(userActions.getCurrentUser())
-      })
-
-    this.store
-      .select(taskSelectors.selectTaskById)
-      .pipe(
-        filter((task) => !!task && task.id === this.taskId),
-        take(1)
-      )
-      .subscribe((task) => {
+      .subscribe(() => {
+        var task = this.selectedTask$()
         if (task) {
           this.taskForm.patchValue({
-            title: task.title,
-            description: task.description,
-            type: task.type,
-            status: task.status,
-            createdOn: task.createdOn,
-            assignedTo: task.assignedTo,
+            title: task?.title,
+            description: task?.description,
+            type: task?.type,
+            status: task?.status,
+            createdOn: task?.createdOn,
+            assignedTo: task?.assignedTo,
           })
         }
       })
-    console.log('onINIT: ', this.taskForm.value)
   }
 
   updateTaskDetails(): void {

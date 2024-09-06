@@ -86,7 +86,7 @@ const _userReducer = createReducer(
 )
 
 export function userReducer(
-  state: UsersState | undefined = initialState, // can be undefined = initialState, but on init the NgRX store is undefined and that needs to be handled
+  state: UsersState | undefined = initialState,
   action: Action
 ): UsersState {
   return _userReducer(state, action)

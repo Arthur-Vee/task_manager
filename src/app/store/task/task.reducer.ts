@@ -47,7 +47,7 @@ const _taskReducer = createReducer(
 )
 
 export function taskReducer(
-  state: TaskState | undefined, // can be undefined = initialState, but on init the NgRX store is undefined and that needs to be handled
+  state: TaskState | undefined,
   action: Action
 ) {
   return _taskReducer(state, action)
