@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Task } from '../../models/task.model'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { tasksApiUrl } from '../../utils/constants'
 
@@ -9,9 +9,6 @@ import { tasksApiUrl } from '../../utils/constants'
   providedIn: 'root'
 })
 export class TasksService {
-
-  taskSubject: BehaviorSubject<Task | null> = new BehaviorSubject<Task | null>(null)
-  task$: Observable<Task | null> = this.taskSubject.asObservable()
 
   constructor(private http: HttpClient) { }
 
@@ -31,9 +28,9 @@ export class TasksService {
     return this.http.delete<Task[]>(tasksApiUrl + taskId)
   }
 
-  updateTask(taskWithNewData: Task, taskId: string): Observable<Task> {
+  updateTask(taskWithNewData: Task): Observable<Task> {
     const body = {
-      id: taskId,
+      id: taskWithNewData.id,
       description: taskWithNewData.description,
       title: taskWithNewData.title,
       status: taskWithNewData.status,

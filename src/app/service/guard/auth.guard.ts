@@ -15,6 +15,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
         router.navigate(['/login'])
         return of(false)
       }
+
       if (requiredRoles) {
         let userHaveRequiredRole = requiredRoles.some((requiredRole: string) => currentUser?.roles.includes(requiredRole))
         if (!userHaveRequiredRole) {
@@ -24,6 +25,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
       }
       return
     })
-  authService.isLoggedInSubject.next(authService.isUserSignedIn() as string)
+
   return true
 }

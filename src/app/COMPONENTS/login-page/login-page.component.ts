@@ -2,10 +2,11 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { MaterialModule } from '../../material.module'
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { CommonModule, isPlatformServer } from '@angular/common'
-import { UsersService } from '../../service/users/users.service'
-import { take } from 'rxjs'
-import { Router, RouterLink } from '@angular/router'
+import { RouterLink } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
+
+import { Store } from '@ngrx/store'
+import * as userActions from "../../store/user/user.actions"
 
 @Component({
   selector: 'app-login-page',
@@ -23,10 +24,9 @@ import { TranslateModule } from '@ngx-translate/core'
 export class LoginPageComponent {
 
   loginForm: FormGroup | null = null
-
   isServer: boolean | null = null
 
-  constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, @Inject(PLATFORM_ID) platformId: Object) {
+  constructor(private store: Store, private fb: FormBuilder, @Inject(PLATFORM_ID) platformId: Object) {
 
     this.isServer = isPlatformServer(platformId)
     this.loginForm = this.fb.group({
@@ -36,16 +36,7 @@ export class LoginPageComponent {
   }
 
   signIn(): void {
-    this.userService.signInUser(this.loginForm?.value).pipe(take(1)
-    ).subscribe({
-      next: () => {
-        this.loginForm?.setErrors(null)
-        this.router.navigate(['/tasks-list'])
-      },
-      error: () => {
-        this.loginForm?.setErrors({ unauthorised: true })
-      }
-    })
+    this.store.dispatch(userActions.signInUser({ body: this.loginForm?.value }))
   }
 }
 

@@ -1,12 +1,15 @@
 import { Component } from '@angular/core'
 import { MaterialModule } from '../../material.module'
-import { UsersService } from '../../service/users/users.service'
 import { ActivatedRoute } from '@angular/router'
-import { map, Observable, switchMap, tap } from 'rxjs'
+import { map, Observable, take } from 'rxjs'
 import { User, UpdateUserRoles } from '../../models/user.model'
 import { CommonModule } from '@angular/common'
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
+
+import { Store } from '@ngrx/store'
+import * as userActions from '../../store/user/user.actions'
+import * as userSelectors from '../../store/user/user.selectors'
 
 @Component({
   selector: 'app-user-details',
@@ -22,13 +25,12 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class UserDetailsComponent {
 
-  individualUser$: Observable<User | null> = this.activatedRoute.params.pipe(
-    tap(user => this.individulaUserId = user['id']),
-    map(params => params['id'] as string),
-    switchMap(id => this.usersService.getIndividualUser(id))
-  )
-
   individulaUserId: string | null = null
+
+  individualUser$: Observable<User | null> = this.store.select(userSelectors.selectAllUsers).pipe(
+    map(users => users.find(user => user.id === this.individulaUserId) || null),
+    take(1))
+
 
   userDetailsForm: FormGroup = this.fb.group({
     defaultRole: new FormControl("USER"),
@@ -37,8 +39,15 @@ export class UserDetailsComponent {
 
   assigning: boolean = false
 
-  constructor(private usersService: UsersService, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
-
+  constructor(private store: Store, private activatedRoute: ActivatedRoute, private fb: FormBuilder) { }
+  ngOnInit() {
+    this.activatedRoute.params.pipe(map((params) => params['id'] as string),
+      take(1)
+    ).subscribe((userId) => {
+      this.store.dispatch(userActions.loadUsers())
+      this.individulaUserId = userId
+    })
+  }
   editUserRole() {
     this.assigning = true
   }
@@ -48,7 +57,7 @@ export class UserDetailsComponent {
       updatedUserId: this.individulaUserId,
       updatedUserRoles: filteredRoleArray
     }
-    this.usersService.updateUserRole(updatedUserDetails)
+    this.store.dispatch(userActions.updateUserRole({ userId: this.individulaUserId, updateUserRole: updatedUserDetails }))
     this.assigning = false
   }
 }
