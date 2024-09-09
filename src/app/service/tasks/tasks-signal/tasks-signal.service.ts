@@ -14,23 +14,23 @@ export interface TaskState {
   providedIn: 'root',
 })
 export class TaskSignal {
-  public tasksSignal = signal<Task[]>([])
+  public tasks = signal<Task[]>([])
   public selectedTaskSignal = signal<Task | null>(null)
   public errorSignal = signal<string | null>(null)
 
   constructor(private tasksService: TasksService, private router: Router) {}
 
-  loadAllTasks() {
+  loadAllTasks(): void {
     this.tasksService
       .getAllTasks()
       .pipe(take(1))
       .subscribe({
-        next: (tasks) => this.tasksSignal.set(tasks),
+        next: (tasks) => this.tasks.set(tasks),
         error: (error) =>
           this.errorSignal.set(error.message || 'Error loading tasks'),
       })
   }
-  loadTaskById(taskId: string) {
+  loadTaskById(taskId: string): void {
     this.tasksService.getTaskById(taskId).subscribe({
       next: (task) => {
         this.selectedTaskSignal.set(task)
@@ -41,35 +41,33 @@ export class TaskSignal {
         this.errorSignal.set(error.message || 'Error loading task'),
     })
   }
-  createTask(task: Task) {
+  createTask(task: Task): void {
     this.tasksService.createNewTask(task).subscribe({
       next: (createdTask) => {
-        this.tasksSignal.update((tasks) => [...tasks, createdTask])
+        this.tasks.update((tasks) => [...tasks, createdTask])
         this.router.navigate(['/tasks-list'])
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error creating task'),
     })
   }
-  updateTask(updatedTaskDetails: Task) {
+  updateTask(updatedTaskDetails: Task): void {
     this.tasksService.updateTask(updatedTaskDetails).subscribe({
       next: (updatedTask) => {
-        const updatedTasks = this.tasksSignal().map((task) =>
+        const updatedTasks = this.tasks().map((task) =>
           task.id === updatedTask.id ? updatedTask : task
         )
-        this.tasksSignal.set(updatedTasks)
+        this.tasks.set(updatedTasks)
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error updating task'),
     })
   }
-  deleteTask(taskId: string) {
+  deleteTask(taskId: string): void {
     this.tasksService.deleteTask(taskId).subscribe({
       next: () => {
-        const updatedTasks = this.tasksSignal().filter(
-          (task) => task.id !== taskId
-        )
-        this.tasksSignal.set(updatedTasks)
+        const updatedTasks = this.tasks().filter((task) => task.id !== taskId)
+        this.tasks.set(updatedTasks)
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error deleting task'),

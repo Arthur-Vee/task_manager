@@ -35,13 +35,12 @@ import { TaskSignal } from '../../service/tasks/tasks-signal/tasks-signal.servic
 export class TaskDetailsComponent implements OnInit {
   users$ = this.store.select(userSelectors.selectAllUsers)
   currentUserRoles$ = this.store.select(userSelectors.selectCurrentUserRoles)
-  selectedTask$ = computed(() => this.tasksSignal.selectedTaskSignal())
   taskId: string = ''
   editing: boolean = false
 
   taskForm: FormGroup = this.fb.group({
     title: new FormControl(
-      { value: this.selectedTask$()?.title, disabled: true },
+      { value: "", disabled: true },
       Validators.required
     ),
     description: new FormControl(
@@ -77,15 +76,15 @@ export class TaskDetailsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        var task = this.selectedTask$()
+        var task = this.tasksSignal.selectedTaskSignal()
         if (task) {
           this.taskForm.patchValue({
-            title: task?.title,
-            description: task?.description,
-            type: task?.type,
-            status: task?.status,
-            createdOn: task?.createdOn,
-            assignedTo: task?.assignedTo,
+            title: task.title,
+            description: task.description,
+            type: task.type,
+            status: task.status,
+            createdOn: task.createdOn,
+            assignedTo: task.assignedTo,
           })
         }
       })

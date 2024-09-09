@@ -18,7 +18,7 @@ import { TaskSignal } from '../../service/tasks/tasks-signal/tasks-signal.servic
   styleUrl: './task.component.scss',
 })
 export class TaskComponent {
-  availableTasks$ = computed(() => this.tasksSignal.tasksSignal())
+  availableTasks$ = computed(() => this.tasksSignal.tasks())
 
   currentUser$: Observable<User | null> = this.store.select(selectCurrentUser)
 
