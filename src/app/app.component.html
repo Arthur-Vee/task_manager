@@ -28,6 +28,15 @@
       >
         {{ "HOME.CREATE_TASK" | translate }}
       </button>
+      <button
+        *ngIf="user.roles.includes('ADMIN')"
+        mat-button
+        type="button"
+        routerLink="/user-groups"
+        routerLinkActive="active"
+      >
+        {{ "HOME.CREATE_GROUP" | translate }}
+      </button>
     </div>
     <div class="navigation">
       <select

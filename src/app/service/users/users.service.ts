@@ -8,7 +8,10 @@ import {
   UserRegistration,
 } from '../../models/user.model'
 import { map, Observable, tap } from 'rxjs'
-import { loginApiUrl, usersApiUrl } from '../../utils/constants'
+import {
+  loginApiUrl,
+  usersApiUrl,
+} from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Store } from '@ngrx/store'
 import { selectCurrentUser } from '../../store/user/user.selectors'

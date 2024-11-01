@@ -30,8 +30,7 @@
             <mat-label>{{"CREATE_TASK.ASSIGNED_TO" | translate}}</mat-label>
             <mat-select formControlName="assignedTo" [placeholder]="'CREATE_TASK.ASSIGNED_TO' | translate">
                 <mat-option value="UNASSIGNED"> {{"CREATE_TASK.UNASSIGNED" | translate}} </mat-option>
-                <mat-option value={{user.id}} *ngFor="let user of users$ | async">{{user.firstName}} {{user.lastName}} -
-                    {{user.username}}</mat-option>
+                <mat-option [value]="group.groupId" *ngFor="let group of userGroupSignal.userGroups()">{{group.groupName}}</mat-option>
             </mat-select>
         </mat-form-field>
 
