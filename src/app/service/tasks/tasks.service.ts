@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core'
 import { Task } from '../../models/task.model'
 import { Observable } from 'rxjs'
-import { HttpClient } from '@angular/common/http'
-import { tasksApiUrl } from '../../utils/constants'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { createTaskApiUrl, tasksApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 
 
@@ -17,22 +17,25 @@ export class TasksService {
   }
 
   getAllTasks(): Observable<Task[]> {
-    var body = {
-      userId: this.localStorage?.getItem('id'),
-    }
-    return this.http.post<Task[]>(tasksApiUrl,body)
+    let userId = this.localStorage?.getItem('id')
+    return this.http.post<Task[]>(tasksApiUrl,{userId})
   }
 
   getTaskById(taskId: string): Observable<Task> {
+    let headers = new HttpHeaders().set("Authorization", `Bearer ${this.localStorage?.getItem('id')}`)
     return this.http.get<Task>(tasksApiUrl + taskId)
   }
 
   createNewTask(task: Task): Observable<Task> {
-    return this.http.post<Task>(tasksApiUrl+"create", task)
+    let userId = this.localStorage?.getItem('id')
+    return this.http.post<Task>(createTaskApiUrl, {task,userId})
   }
 
   deleteTask(taskId: string): Observable<Task[]> {
-    return this.http.delete<Task[]>(tasksApiUrl + taskId)
+    let body = {
+      userId: this.localStorage?.getItem('id')
+    }
+    return this.http.delete<Task[]>(tasksApiUrl + taskId,{body})
   }
 
   updateTask(taskWithNewData: Task): Observable<Task> {

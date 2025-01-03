@@ -1,4 +1,5 @@
 export const tasksApiUrl = 'http://localhost:3000/tasks/'
+export const createTaskApiUrl = 'http://localhost:3000/tasks/create'
 export const usersApiUrl = 'http://localhost:3000/users/'
 export const usersGroupApiUrl = 'http://localhost:3000/userGroup/'
 export const loginApiUrl = 'http://localhost:3000/login/'

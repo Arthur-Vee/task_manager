@@ -1,6 +1,5 @@
 import { Injectable, signal } from '@angular/core'
 import { take } from 'rxjs'
-import { Router } from '@angular/router'
 import { UserGroup } from '../../../models/user.model'
 import { UserGroupService } from '../userGroup.service'
 
@@ -17,7 +16,6 @@ export class UserGroupSignal {
   public errorSignal = signal<string | null>(null)
 
   constructor(
-    private router: Router,
     private userGoupService: UserGroupService
   ) {}
 
@@ -39,7 +37,6 @@ export class UserGroupSignal {
           ...userGroups,
           createdUserGroup,
         ])
-        this.router.navigate(['/tasks-list'])
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error creating task'),
@@ -52,7 +49,6 @@ export class UserGroupSignal {
           ...userGroups,
           updatedUserGroup,
         ])
-        this.router.navigate(['/tasks-list'])
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error creating task'),
@@ -65,7 +61,6 @@ export class UserGroupSignal {
           ...userGroups,
           updatedUserGroup,
         ])
-        location.reload()
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error creating task'),
@@ -73,12 +68,10 @@ export class UserGroupSignal {
   }
   deleteGroup(groupId: string): void {
     this.userGoupService.deleteGroup(groupId).subscribe({
-      next: (updatedUserGroup) => {
-        this.userGroups.update((userGroups) => [
-          ...userGroups,
-          updatedUserGroup,
-        ])
-        location.reload()
+      next: () => {
+        this.userGroups.update((userGroups) =>
+          userGroups.filter((group) => group.groupId !== groupId)
+        )
       },
       error: (error) =>
         this.errorSignal.set(error.message || 'Error creating task'),

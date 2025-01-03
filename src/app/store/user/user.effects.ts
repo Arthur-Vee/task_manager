@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { of, tap } from 'rxjs'
+import { of, retry, tap } from 'rxjs'
 import { catchError, map, mergeMap, switchMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import * as userActions from './user.actions'
@@ -90,6 +90,7 @@ export class UserEffects {
       ofType(userActions.registerUser),
       switchMap(({ user }) =>
         this.service.registerUser(user).pipe(
+          retry(1),
           tap((response) => {
             localStorage.setItem('id', response.id)
             localStorage.setItem('isLoggedIn', response.token)

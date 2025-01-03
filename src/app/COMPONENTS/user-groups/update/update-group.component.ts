@@ -14,7 +14,7 @@ import * as userSelectors from '../../../store/user/user.selectors'
 import * as userActions from '../../../store/user/user.actions'
 import { User, UserGroup } from '../../../models/user.model'
 import { UserGroupSignal } from '../../../service/userGroup/userGroup-signal/userGroup-signal.service'
-import { map, Observable } from 'rxjs'
+import { BehaviorSubject, map, take } from 'rxjs'
 import { MatListOption } from '@angular/material/list'
 
 @Component({
@@ -34,16 +34,25 @@ import { MatListOption } from '@angular/material/list'
 export class UpdateComponent {
   updateUserGroupForm: FormGroup | null = null
   users$ = this.store.select(userSelectors.selectAllUsers)
+  
+  availableUsers$ = new BehaviorSubject<User[]>([])
+  groupUsers$ = new BehaviorSubject<User[]>([])
+  
 
-  readonly hideSingleSelectionIndicator = signal(false)
-  readonly panelOpenState = signal(false)
-  readonly detailsPanelOpenState = signal(false)
-  readonly membersDetailsPanelOpenState = signal(false)
+  
+  readonly panelState = signal({
+    panelOpenState: false,
+    detailsPanelOpenState: false,
+    membersDetailsPanelOpenState: false,
+  })
+
+
+
 
   constructor(
     private fb: FormBuilder,
     private store: Store<AppState>,
-    public userGroupSignal: UserGroupSignal
+    public userGroupSignal: UserGroupSignal,
   ) {
     this.updateUserGroupForm = this.fb.group({
       groupName: new FormControl(''),
@@ -55,27 +64,23 @@ export class UpdateComponent {
     this.userGroupSignal.loadUserGroups()
     this.store.dispatch(userActions.loadUsers())
   }
-  getAvailableUsersForGroup(groupMembers: string[] | null): Observable<User[]> {
-    return this.users$.pipe(
-      map((users) =>
-        users.filter((user) => !(groupMembers ?? []).includes(user.id))
-      )
-    )
-  }
-  getUsersFromGroup(groupMembers: string[] | null): Observable<User[]> {
-    return this.users$.pipe(
-      map((users) =>
-        users.filter((user) => (groupMembers ?? []).includes(user.id))
-      )
-    )
-  }
-  openTab(): void {
-    this.membersDetailsPanelOpenState.set(false)
-    this.detailsPanelOpenState.set(!this.detailsPanelOpenState())
-  }
-  openMembers(): void {
-    this.detailsPanelOpenState.set(false)
-    this.membersDetailsPanelOpenState.set(!this.membersDetailsPanelOpenState())
+
+  onGroupSelect(groupMembers: string[] | null): void {
+    this.panelState().panelOpenState = true
+    this.users$.pipe(
+      take(1),
+      map((users) => {
+        const availableUsers = users.filter(
+          (user) => !(groupMembers ?? []).includes(user.id)
+        )
+        const groupUsers = users.filter((user) =>
+          (groupMembers ?? []).includes(user.id)
+        )
+        this.panelState().panelOpenState = true
+        this.availableUsers$.next(availableUsers)
+        this.groupUsers$.next(groupUsers)
+      })
+    ).subscribe()
   }
   updateUserGroup(id: string | null): void {
     if (this.updateUserGroupForm?.valid) {

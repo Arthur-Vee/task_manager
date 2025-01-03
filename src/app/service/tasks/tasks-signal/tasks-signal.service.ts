@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core'
 import { Task } from '../../../models/task.model'
 import { TasksService } from '../tasks.service'
-import { take } from 'rxjs'
+import { retry, take } from 'rxjs'
 import { Router } from '@angular/router'
 
 export interface TaskState {
@@ -23,7 +23,7 @@ export class TaskSignal {
   loadAllTasks(): void {
     this.tasksService
       .getAllTasks()
-      .pipe(take(1))
+      .pipe(retry(1),take(1))
       .subscribe({
         next: (tasks) => this.tasks.set(tasks),
         error: (error) =>

@@ -18,16 +18,16 @@ export class UserGroupService {
   }
 
   getAllUserGroups(): Observable<UserGroup[]> {
-    var action = 'getAllUserGroups'
-    var body = {
+    let action = 'getAllUserGroups'
+    let body = {
       userId: this.localStorage?.getItem('id'),
     }
     return this.http.post<UserGroup[]>(usersGroupApiUrl + action, body)
   }
 
   createUserGroup(userGroupData: UserGroup): Observable<UserGroup> {
-    var body = {
-      adminToken: this.localStorage?.getItem('id'),
+    let body = {
+      userId: this.localStorage?.getItem('id'),
       groupName: userGroupData.groupName,
       groupDescription: userGroupData.groupDescription,
       groupMembers: userGroupData.groupMembers,
@@ -35,8 +35,8 @@ export class UserGroupService {
     return this.http.post<UserGroup>(usersGroupApiUrl, body)
   }
   updateUserGroup(groupData: UserGroup): Observable<UserGroup> {
-    var body = {
-      adminToken: this.localStorage?.getItem('id'),
+    let body = {
+      userId: this.localStorage?.getItem('id'),
       groupId: groupData.groupId,
       groupName: groupData.groupName,
       groupDescription: groupData.groupDescription,
@@ -45,8 +45,8 @@ export class UserGroupService {
     return this.http.patch<UserGroup>(usersGroupApiUrl, body)
   }
   deleteUsersFromGroup(group: UserGroup): Observable<UserGroup> {
-    var body = {
-      adminToken: this.localStorage?.getItem('id'),
+    let body = {
+      userId: this.localStorage?.getItem('id'),
       groupId: group.groupId,
       groupMembers: group.groupMembers,
     }
@@ -56,7 +56,7 @@ export class UserGroupService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.localStorage?.getItem('id')}`,
     })
-    var body = {
+    let body = {
       groupId: groupId,
     }
     return this.http.post<UserGroup>(usersGroupApiUrl + 'deleteGroup', body, {

@@ -1,10 +1,9 @@
 <section id="updateGroupSection">
   <h1 class="title">{{ "UPDATE_GROUP.TITLE" | translate }}</h1>
   <mat-accordion multi="false">
-    <ul *ngFor="let group of userGroupSignal.userGroups()">
+    <ul *ngFor="let group of this.userGroupSignal.userGroups()">
       <mat-expansion-panel
-        (opened)="panelOpenState.set(true)"
-        (closed)="panelOpenState.set(false)"
+        (opened)="onGroupSelect(group.groupMembers)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>Group name: {{ group.groupName }}</mat-panel-title>
@@ -13,7 +12,7 @@
           >
         </mat-expansion-panel-header>
         <mat-card
-          *ngIf="detailsPanelOpenState"
+          *ngIf="panelState().panelOpenState"
           class="card"
           appearance="outlined"
           onsubmit=""
@@ -25,10 +24,10 @@
               name="openGroupEdit"
               hideSingleSelectionIndicator="true"
             >
-              <mat-button-toggle (click)="openTab()"
+              <mat-button-toggle (click)="panelState().detailsPanelOpenState = !panelState().detailsPanelOpenState"
                 >Edit Group Details</mat-button-toggle
               >
-              <mat-button-toggle (click)="openMembers()"
+              <mat-button-toggle (click)="panelState().membersDetailsPanelOpenState = !panelState().membersDetailsPanelOpenState "
                 >Group Members</mat-button-toggle
               >
             </mat-button-toggle-group>
@@ -41,7 +40,7 @@
             </button>
           </mat-card-header>
           <form
-            *ngIf="updateUserGroupForm && detailsPanelOpenState()"
+            *ngIf="updateUserGroupForm && panelState().detailsPanelOpenState"
             #updatedUserGroupForm
             [formGroup]="updateUserGroupForm"
             (ngSubmit)="updateUserGroup(group.groupId)"
@@ -86,7 +85,7 @@
                 <mat-option
                   [value]="user.id"
                   *ngFor="
-                    let user of getAvailableUsersForGroup(group.groupMembers)
+                    let user of availableUsers$
                       | async
                   "
                   >{{ user.firstName }} {{ user.lastName }} -
@@ -103,11 +102,11 @@
           </form>
           <mat-selection-list
             #memberList
-            *ngIf="membersDetailsPanelOpenState()"
+            *ngIf="panelState().membersDetailsPanelOpenState"
           >
             <mat-list-option
               [value]="user"
-              *ngFor="let user of getUsersFromGroup(group.groupMembers) | async"
+              *ngFor="let user of groupUsers$ | async"
               >{{ user.firstName }} {{ user.lastName }} -
               {{ user.username }}</mat-list-option
             >
