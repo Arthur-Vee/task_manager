@@ -25,7 +25,6 @@ export class TaskComponent {
   ngOnInit(): void {
     this.tasksSignal.loadAllTasks()
   }
-
   deleteTask(taskId: string): void {
     this.tasksSignal.deleteTask(taskId)
   }
