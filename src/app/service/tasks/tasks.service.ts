@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core'
 import { Task } from '../../models/task.model'
-import { filter, Observable, shareReplay, switchMap } from 'rxjs'
+import { catchError, filter, Observable, shareReplay, switchMap, throwError } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { createTaskApiUrl, tasksApiUrl } from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
@@ -15,19 +15,27 @@ export class TasksService {
   localStorage: Storage | undefined
   
   userId$ = this.store.select(selectCurrentUserId).pipe(
-    filter((userId) => !!userId),
-    shareReplay(1) // Share the latest emitted value with all subscribers
-  );
+    filter((userId): userId is string => userId !== undefined && userId !== null),
+    shareReplay(1)
+  )
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private store: Store,) { 
     this.localStorage = document.defaultView?.localStorage
   }
-
-  getAllTasks(): Observable<Task[]> {
+  getUserId<T>(callback: (userId: string) => Observable<T>): Observable<T> {
     return this.userId$.pipe(
-      switchMap((userId) => {
-        return this.http.post<Task[]>(tasksApiUrl, { userId })
+      switchMap(callback),
+      catchError((error) => {
+        console.error('Error during API call:', error);
+        return throwError(() => error);
       })
+    );
+  }
+  getAllTasks(): Observable<Task[]> {
+    return this.getUserId((userId)=> {
+        return this.http.post<Task[]>(tasksApiUrl, { userId }
+        )
+      }
     )
   }
 
@@ -36,27 +44,23 @@ export class TasksService {
   }
 
   createNewTask(task: Task): Observable<Task> {
-    return this.userId$.pipe(
-      switchMap((userId) => {
-        return this.http.post<Task>(createTaskApiUrl, {task,userId})
-      })
+    return this.getUserId(
+        (userId)=>{
+        return this.http.post<Task>(createTaskApiUrl, {task,userId})}
     )
   }
-
   deleteTask(taskId: string): Observable<Task[]> {
-    return this.userId$.pipe(
-      switchMap((userId) => {
-        const body = {
-          userId: userId
-        };
-        return this.http.delete<Task[]>(tasksApiUrl + taskId,{body})
-      })
-    )
+    return this.getUserId((userId)=> {
+      const body = {
+        userId: userId
+      }
+      return this.http.delete<Task[]>(tasksApiUrl + taskId,{body})
+    }
+  )
   }
 
   updateTask(taskWithNewData: Task): Observable<Task> {
-    return this.userId$.pipe(
-      switchMap((userId) => {
+    return this.getUserId((userId) => {
         const body = {
           id: taskWithNewData.id,
           userId: userId,
@@ -68,6 +72,5 @@ export class TasksService {
         }
         return this.http.patch<Task>(tasksApiUrl, body)
       })
-    )
   }
 }
