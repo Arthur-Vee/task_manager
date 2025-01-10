@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core'
+import { Component } from '@angular/core'
 import { Task } from '../../models/task.model'
 import { NgFor, NgIf, CommonModule } from '@angular/common'
 import { MaterialModule } from '../../material.module'
@@ -18,7 +18,6 @@ import { TaskSignal } from '../../service/tasks/tasks-signal/tasks-signal.servic
   styleUrl: './task.component.scss',
 })
 export class TaskComponent {
-  availableTasks$ = computed(() => this.tasksSignal.tasks())
 
   currentUser$: Observable<User | null> = this.store.select(selectCurrentUser)
 
@@ -26,11 +25,11 @@ export class TaskComponent {
   ngOnInit(): void {
     this.tasksSignal.loadAllTasks()
   }
-
   deleteTask(taskId: string): void {
     this.tasksSignal.deleteTask(taskId)
   }
   sendToTaskDetails(task: Task): void {
     this.tasksSignal.loadTaskById(task.id)
   }
+  
 }

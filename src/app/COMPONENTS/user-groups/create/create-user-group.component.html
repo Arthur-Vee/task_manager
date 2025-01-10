@@ -1,0 +1,68 @@
+<section class="createGroupSection" *ngIf="editing">
+  <h1>{{ "CREATE_GROUP.TITLE" | translate }}</h1>
+  <form
+    *ngIf="createUserGroupForm"
+    #createdGroupForm
+    [formGroup]="createUserGroupForm"
+    (ngSubmit)="createUserGroup()"
+  >
+    <mat-form-field>
+      <mat-label>{{ "CREATE_GROUP.GROUP_TITLE" | translate }}</mat-label>
+      <input
+        id="title"
+        matInput
+        formControlName="groupName"
+        [placeholder]="'CREATE_GROUP.GROUP_TITLE' | translate"
+        type="text"
+        value=""
+      />
+      <mat-error
+        >{{ "CREATE_GROUP.GROUP_TITLE" | translate }}
+        {{ "ERROR.IS_REQUIRED" | translate }}</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "CREATE_GROUP.DESCRIPTION" | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="groupDescription"
+        [placeholder]="'CREATE_GROUP.DESCRIPTION' | translate"
+        value=""
+      />
+      <mat-error
+        >{{ "CREATE_GROUP.DESCRIPTION" | translate }}
+        {{ "ERROR.IS_REQUIRED" | translate }}</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ "CREATE_GROUP.GROUP_MEMBERS" | translate }}</mat-label>
+      <mat-select
+        formControlName="groupMembers"
+        [placeholder]="'CREATE_GROUP.GROUP_MEMBERS' | translate"
+        multiple
+      >
+        <mat-option value="{{ user.id }}" *ngFor="let user of users$ | async"
+          >{{ user.firstName }} {{ user.lastName }} -
+          {{ user.username }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <br />
+
+    <button mat-flat-button color="primary">
+      {{ "CREATE_GROUP.BUTTON_CREATE_GROUP" | translate }}
+    </button>
+  </form>
+</section>
+<button
+  mat-flat-button
+  class="createGroupSectionOpenButton"
+  color="primary"
+  *ngIf="!editing"
+  (click)="editing = true"
+>
+  {{ "CREATE_GROUP.BUTTON_CREATE_GROUP" | translate }}
+</button>

@@ -8,7 +8,10 @@ import {
   UserRegistration,
 } from '../../models/user.model'
 import { map, Observable, tap } from 'rxjs'
-import { loginApiUrl, usersApiUrl } from '../../utils/constants'
+import {
+  loginApiUrl,
+  usersApiUrl,
+} from '../../utils/constants'
 import { DOCUMENT } from '@angular/common'
 import { Store } from '@ngrx/store'
 import { selectCurrentUser } from '../../store/user/user.selectors'
@@ -31,7 +34,7 @@ export class UsersService {
   }
 
   getIndividualUser(id: string): Observable<User> {
-    var body = {
+    let body = {
       token: this.localStorage?.getItem('token'),
     }
     return this.http.post<User>(usersApiUrl + id, body)
@@ -53,8 +56,12 @@ export class UsersService {
   }
 
   getUser(): Observable<User> {
-    var id = this.localStorage?.getItem('id')
-    var body = {
+    let id = this.localStorage?.getItem('id')
+    if (!id) {
+      this.localStorage?.removeItem('isLoggedIn')
+    }
+    let body = {
+      userId:id,
       token: this.localStorage?.getItem('isLoggedIn'),
     }
     return this.http.post<User>(usersApiUrl + id, body)
@@ -65,7 +72,7 @@ export class UsersService {
   }
 
   updateUserRole(updateUserRole: UpdateUserRoles): void {
-    var body = {
+    let body = {
       adminToken: this.localStorage?.getItem('id'),
       updatedUserData: updateUserRole,
     }
