@@ -1,0 +1,43 @@
+<mat-card class="login-card">
+    <mat-card-header>
+        <mat-card-title>{{"REGISTER.TITLE" | translate}}</mat-card-title>
+    </mat-card-header>
+    <br>
+    <mat-card-content>
+        <form *ngIf="registrationForm" [formGroup]="registrationForm" (ngSubmit)="registerUser(registrationForm.value)">
+            <mat-form-field appearance="fill">
+                <mat-label>{{"REGISTER.USERNAME" | translate}}</mat-label>
+                <input matInput type="text" formControlName="username">
+                <mat-error>
+                    {{"REGISTER.USERNAME" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{"REGISTER.PASSWORD" | translate}}</mat-label>
+                <input matInput type="password" formControlName="password">
+                <mat-error>
+                    {{"REGISTER.PASSWORD" | translate}} {{"ERROR.IS_REQUIRED" | translate}}.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{"REGISTER.FIRST_NAME" | translate}}</mat-label>
+                <input matInput type="text" formControlName="firstName">
+                <mat-error>
+                    {{"REGISTER.FIRST_NAME" | translate}} {{"ERROR.IS_REQUIRED" | translate}}
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>{{"REGISTER.LAST_NAME" | translate}}</mat-label>
+                <input matInput type="text" formControlName="lastName">
+                <mat-error>
+                    {{"REGISTER.LAST_NAME" | translate}} {{"ERROR.IS_REQUIRED" | translate}}
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit">{{"REGISTER.REGISTER_BUTTON" | translate}}</button>
+            <br>
+            <a  mat-raised-button color="primary" href="/login">
+                {{ "REGISTER.BACK_BUTTON" | translate }}
+            </a>
+        </form>
+    </mat-card-content>
+</mat-card>

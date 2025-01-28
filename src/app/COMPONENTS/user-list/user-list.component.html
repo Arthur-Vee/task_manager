@@ -1,0 +1,13 @@
+<h1 class="title">{{"USERS.TITLE" | translate}}</h1>
+<ul *ngFor="let user of allUsers$ | async" class="userListWrapper">
+    <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+                <mat-panel-title> {{user.firstName}} {{user.lastName}}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <button id="userDetailsButton" mat-flat-button class="success" type="submit"
+                (click)="redirectToUserDetails(user.id)">{{"USERS.DETAILS_BUTTON" | translate}}</button>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</ul>

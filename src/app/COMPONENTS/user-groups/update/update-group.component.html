@@ -1,0 +1,132 @@
+<section id="updateGroupSection">
+  <h1 class="title">{{ "UPDATE_GROUP.TITLE" | translate }}</h1>
+  <mat-accordion multi="false">
+    <ul *ngFor="let group of this.userGroupSignal.userGroups()">
+      <mat-expansion-panel
+        (opened)="onGroupSelect(group.groupMembers)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>Group name: {{ group.groupName }}</mat-panel-title>
+          <mat-panel-title
+            >Members: {{ group.groupMembers?.length }}</mat-panel-title
+          >
+        </mat-expansion-panel-header>
+        <mat-card
+          *ngIf="panelState().panelOpenState"
+          class="card"
+          appearance="outlined"
+          onsubmit=""
+          display="hidden"
+          class="updateGroupWrapper"
+        >
+          <mat-card-header class="updateGroupHeader">
+            <mat-button-toggle-group
+              name="openGroupEdit"
+              hideSingleSelectionIndicator="true"
+            >
+              <mat-button-toggle (click)="panelState().detailsPanelOpenState = !panelState().detailsPanelOpenState"
+                >Edit Group Details</mat-button-toggle
+              >
+              <mat-button-toggle (click)="panelState().membersDetailsPanelOpenState = !panelState().membersDetailsPanelOpenState "
+                >Group Members</mat-button-toggle
+              >
+            </mat-button-toggle-group>
+            <button
+              mat-flat-button
+              color="warn"
+              (click)="deleteUserGroup(group.groupId)"
+            >
+              {{ "UPDATE_GROUP.BUTTON_DELETE_GROUP" | translate }}
+            </button>
+          </mat-card-header>
+          <form
+            *ngIf="updateUserGroupForm && panelState().detailsPanelOpenState"
+            #updatedUserGroupForm
+            [formGroup]="updateUserGroupForm"
+            (ngSubmit)="updateUserGroup(group.groupId)"
+            class="updateGroupHeader"
+          >
+            <mat-form-field>
+              <mat-label>{{ group.groupName }}</mat-label>
+              <input
+                id="title"
+                matInput
+                formControlName="groupName"
+                [placeholder]="group.groupName ?? ''"
+                type="text"
+              />
+              <mat-error
+                >{{ "UPDATE_GROUP.GROUP_TITLE" | translate }}
+                {{ "ERROR.IS_REQUIRED" | translate }}</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>{{ group.groupDescription }}</mat-label>
+              <input
+                matInput
+                formControlName="groupDescription"
+                [placeholder]="group.groupDescription ?? ''"
+              />
+              <mat-error
+                >{{ "UPDATE_GROUP.DESCRIPTION" | translate }}
+                {{ "ERROR.IS_REQUIRED" | translate }}</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>{{
+                "UPDATE_GROUP.GROUP_MEMBERS" | translate
+              }}</mat-label>
+              <mat-select
+                formControlName="groupMembers"
+                [placeholder]="'UPDATE_GROUP.GROUP_MEMBERS' | translate"
+                multiple
+              >
+                <mat-option
+                  [value]="user.id"
+                  *ngFor="
+                    let user of availableUsers$
+                      | async
+                  "
+                  >{{ user.firstName }} {{ user.lastName }} -
+                  {{ user.username }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <br />
+
+            <button mat-flat-button color="primary">
+              {{ "UPDATE_GROUP.BUTTON_UPDATE_GROUP" | translate }}
+            </button>
+          </form>
+          <mat-selection-list
+            #memberList
+            *ngIf="panelState().membersDetailsPanelOpenState"
+          >
+            <mat-list-option
+              [value]="user"
+              *ngFor="let user of groupUsers$ | async"
+              >{{ user.firstName }} {{ user.lastName }} -
+              {{ user.username }}</mat-list-option
+            >
+            <button
+              mat-flat-button
+              color="warn"
+              [disabled]="!memberList.selectedOptions.selected.length"
+              (click)="
+                deletUserGroupMembers(
+                  memberList.selectedOptions.selected,
+                  group
+                )
+              "
+              class="updateGroupButton"
+            >
+              {{ "UPDATE_GROUP.BUTTON_DELETE_MEMBERS" | translate }}
+            </button>
+          </mat-selection-list>
+        </mat-card>
+      </mat-expansion-panel>
+    </ul>
+  </mat-accordion>
+</section>
